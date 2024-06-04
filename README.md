@@ -16,6 +16,7 @@ Add, modify, and delete items from your grocery list. Storage will persist inbet
 
 ## Notes for self
 
+- create without db first
 - only store grocery list in database, not individual items
   - grocery list contains all items that i need
   - item class is for id purposes
