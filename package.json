@@ -9,14 +9,16 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~3.2.1",
     "expo": "~51.0.11",
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",
-    "react-native": "^0.74.2",
-    "realm": "^12.9.0",
-    "react-native-web": "~0.19.10",
     "react-dom": "18.2.0",
-    "@expo/metro-runtime": "~3.2.1"
+    "react-native": "^0.74.2",
+    "react-native-get-random-values": "^1.11.0",
+    "react-native-web": "~0.19.10",
+    "realm": "^12.9.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
