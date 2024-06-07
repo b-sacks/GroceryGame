@@ -6,12 +6,11 @@ Items can be added, deleted, and updated.
 // Path: services/Item.js
 // maybe make id private
 
-const { v4: uuidv4 } = require('uuid');
-require('react-native-get-random-values');
+// const { v4: uuidv4 } = require('uuid');
+// require('react-native-get-random-values');
 
 class Item {
   constructor(name) {
-    this.id = uuidv4();
     this.name = name;
   }
 

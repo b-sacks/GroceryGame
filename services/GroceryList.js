@@ -5,11 +5,11 @@ database functionalities are in the database directory.
 store items as a list of item ids.
 */
 
-import { Item } from './Item';
+const Item = require('./Item');
 
 class GroceryList {
     // The Singleton instance is stored in a static variable.
-    static instance;
+    // static instance;
   
     constructor() {
       // If the instance already exists, return it.
@@ -25,27 +25,36 @@ class GroceryList {
     }
   
     // Your methods go here.
-    addItem(name) {
-      const item = new Item(name);
+    addItem(item) {
       this.items.push(item);
     }
   
-    removeItem(id) {
-      this.items = this.items.filter((item) => item.id !== id);
+    deleteItem(index) {
+      this.items.splice(index, 1);
     }
 
-    updateItem(id, newName) {
-      const item = this.items.find((item) => item.id === id);
-      item.setName(newName);
-      // Update item in database
+    updateItem(index, name) {
+      const item = this.items[index];
+      if (item) {
+        item.setName(name);
+      }
     }
   
     getItems() {
       return this.items;
     }
   }
+
+  const a = new GroceryList();
+  a.addItem(new Item('apple'));
+  a.addItem(new Item('banana'));
+  a.addItem(new Item('carrot'));
+  a.deleteItem(1);
+  console.log(a.items);
+
+  module.exports = GroceryList;
   
   // Usage:
-  const list1 = new GroceryList();
-  const list2 = new GroceryList();
-  console.log(list1 === list2); // true
+  // const list1 = new GroceryList();
+  // const list2 = new GroceryList();
+  // console.log(list1 === list2); // true
