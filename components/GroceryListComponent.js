@@ -1,36 +1,38 @@
 // components/GroceryListComponent.js
 const React = require('react');
 const { useState } = React;
-const { View, Button, TextInput } = require('react-native');
+const { View, Button, TextInput, Text } = require('react-native');
 const ItemComponent = require('./ItemComponent');
 const GroceryList = require('../services/GroceryList');
 const Item = require('../services/Item');
 
 const GroceryListComponent = () => {
-  const groceryList = new GroceryList();
-  const [items, setItems] = useState(groceryList.getItems());
   const [newItemName, setNewItemName] = useState('');
+  const [groceryList, setGroceryList] = useState(new GroceryList([]));
 
   const addItem = () => {
+    if (!newItemName.trim()) {
+      return;
+    }
     const newItem = new Item(newItemName);
     groceryList.addItem(newItem);
-    setItems([...groceryList.getItems()]);
     setNewItemName('');
+    setGroceryList(new GroceryList(groceryList.items));
   };
 
   const deleteItem = (index) => {
     groceryList.deleteItem(index);
-    setItems([...groceryList.getItems()]);
+    setGroceryList(new GroceryList(groceryList.items));
   };
 
   const updateItem = (index, name) => {
     groceryList.updateItem(index, name);
-    setItems([...groceryList.getItems()]);
+    setGroceryList(new GroceryList(groceryList.items));
   };
 
   return (
     <View>
-      {items.map((item, index) => (
+      {groceryList.items.map((item, index) => (
         <ItemComponent
           key={index}
           item={item}
@@ -44,6 +46,7 @@ const GroceryListComponent = () => {
         placeholder="New item name"
       />
       <Button title="Add Item" onPress={addItem} />
+      <Text>{groceryList.items.map((item) => item.name).join(', ')}</Text>
     </View>
   );
 };

@@ -24,7 +24,7 @@ const GroceryListComponent = require('./components/GroceryListComponent');
 
 export default function App() {
   return (
-    <View>
+    <View style={{ paddingTop: 50 }}>
       <GroceryListComponent />
     </View>
   );
