@@ -5,21 +5,25 @@ database functionalities are in the database directory.
 store items as a list of item ids.
 */
 
-const Item = require('./Item');
+const db = require('../database/GroceryListDatabase');
 
 class GroceryList {
   
-    constructor(items) {
-      this.items = items;
+    constructor() {
+      db.getGroceryList().forEach((groceryList) => {
+        this.items = groceryList.items;
+      });
     }
   
     // Your methods go here.
     addItem(item) {
       this.items.push(item);
+      db.saveGroceryList(this);
     }
   
     deleteItem(index) {
       this.items.splice(index, 1);
+      db.saveGroceryList(this);
     }
 
     updateItem(index, name) {
@@ -27,6 +31,7 @@ class GroceryList {
       if (item) {
         item.setName(name);
       }
+      db.saveGroceryList(this);
     }
   }
 

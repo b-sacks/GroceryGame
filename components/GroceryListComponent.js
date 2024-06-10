@@ -9,7 +9,7 @@ import Dialog from "react-native-dialog";
 
 const GroceryListComponent = () => {
   const [newItemName, setNewItemName] = useState('');
-  const [groceryList, setGroceryList] = useState(new GroceryList([]));
+  const [groceryList, setGroceryList] = useState(new GroceryList());
   const [isDialogVisible, setDialogVisible] = useState(false);
 
   const addItem = () => {
@@ -19,18 +19,18 @@ const GroceryListComponent = () => {
     const newItem = new Item(newItemName);
     groceryList.addItem(newItem);
     setNewItemName('');
-    setGroceryList(new GroceryList(groceryList.items));
+    setGroceryList(new GroceryList());
     setDialogVisible(false);
   };
 
   const deleteItem = (index) => {
     groceryList.deleteItem(index);
-    setGroceryList(new GroceryList(groceryList.items));
+    setGroceryList(new GroceryList());
   };
 
   const updateItem = (index, name) => {
     groceryList.updateItem(index, name);
-    setGroceryList(new GroceryList(groceryList.items));
+    setGroceryList(new GroceryList());
   };
 
   return (
