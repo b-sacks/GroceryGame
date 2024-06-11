@@ -9,29 +9,37 @@ import Dialog from "react-native-dialog";
 
 const GroceryListComponent = () => {
   const [newItemName, setNewItemName] = useState('');
-  const [groceryList, setGroceryList] = useState(new GroceryList([]));
+  const [groceryList, setGroceryList] = useState(new GroceryList());
   const [isDialogVisible, setDialogVisible] = useState(false);
 
   const addItem = () => {
     if (!newItemName.trim()) {
       return;
     }
-    const newItem = new Item(newItemName);
-    groceryList.addItem(newItem);
+    const newList = new GroceryList();
+    newList.addItem(newItemName);
     setNewItemName('');
-    setGroceryList(new GroceryList(groceryList.items));
+    setGroceryList(newList);
     setDialogVisible(false);
   };
 
   const deleteItem = (index) => {
-    groceryList.deleteItem(index);
-    setGroceryList(new GroceryList(groceryList.items));
+    const newList = new GroceryList();
+    newList.deleteItem(index);
+    setGroceryList(newList);
   };
 
   const updateItem = (index, name) => {
-    groceryList.updateItem(index, name);
-    setGroceryList(new GroceryList(groceryList.items));
+    const newList = new GroceryList();
+    newList.updateItem(index, name);
+    setGroceryList(newList);
   };
+
+  const deleteAllItems = () => {
+    const newList = new GroceryList();
+    newList.deleteAllItems();
+    setGroceryList(newList);
+  }
 
   return (
     <View>
@@ -50,7 +58,7 @@ const GroceryListComponent = () => {
         <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
         <Dialog.Button label="Add" onPress={addItem} />
       </Dialog.Container>
-      <Button title="Delete All" onPress={() => setGroceryList(new GroceryList([]))} color="red" />
+      <Button title="Delete All" onPress={deleteAllItems} color="red" />
       <Text>{groceryList.items.map((item) => item.name).join(', ')}</Text>
     </View>
   );
