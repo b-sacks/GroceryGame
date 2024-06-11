@@ -74,4 +74,10 @@ function updateItem(groceryList, index, name) {
   }
 }
 
-module.exports = {saveGroceryList, getGroceryList, addItemToGroceryList, deleteItem, deleteAllItems, updateItem};
+function loadGroceryList(groceryList) {
+  getGroceryList().forEach((list) => {
+    groceryList.items = list.items;
+  });
+}
+
+module.exports = {saveGroceryList, getGroceryList, addItemToGroceryList, deleteItem, deleteAllItems, updateItem, loadGroceryList};

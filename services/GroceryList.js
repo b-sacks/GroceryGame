@@ -12,9 +12,7 @@ class GroceryList {
   
   constructor() {
     this.items = [];
-    db.getGroceryList().forEach((groceryList) => {
-      this.items = groceryList.items;
-    });
+    db.loadGroceryList(this);
   }
 
   // Your methods go here.
