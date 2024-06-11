@@ -6,34 +6,33 @@ store items as a list of item ids.
 */
 
 const db = require('../database/GroceryListDatabase');
+const Realm = require('realm');
 
 class GroceryList {
   
-    constructor() {
-      db.getGroceryList().forEach((groceryList) => {
-        this.items = groceryList.items;
-      });
-    }
-  
-    // Your methods go here.
-    addItem(item) {
-      this.items.push(item);
-      db.saveGroceryList(this);
-    }
-  
-    deleteItem(index) {
-      this.items.splice(index, 1);
-      db.saveGroceryList(this);
-    }
-
-    updateItem(index, name) {
-      const item = this.items[index];
-      if (item) {
-        item.setName(name);
-      }
-      db.saveGroceryList(this);
-    }
+  constructor() {
+    this.items = [];
+    db.getGroceryList().forEach((groceryList) => {
+      this.items = groceryList.items;
+    });
   }
+
+  // Your methods go here.
+  addItem(name) {
+    db.addItemToGroceryList(this, name);
+  }
+
+  deleteItem(index) {
+    db.deleteItem(this, index);
+  }
+
+  deleteAllItems() {
+    db.deleteAllItems(this);
+  }    
+  updateItem(index, name) {
+    db.updateItem(this, index, name);
+  }
+}
 
   module.exports = GroceryList;
   

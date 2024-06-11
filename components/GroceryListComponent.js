@@ -16,22 +16,30 @@ const GroceryListComponent = () => {
     if (!newItemName.trim()) {
       return;
     }
-    const newItem = new Item(newItemName);
-    groceryList.addItem(newItem);
+    const newList = new GroceryList([...groceryList.items]);
+    newList.addItem(newItemName);
     setNewItemName('');
-    setGroceryList(new GroceryList());
+    setGroceryList(newList);
     setDialogVisible(false);
   };
 
   const deleteItem = (index) => {
-    groceryList.deleteItem(index);
-    setGroceryList(new GroceryList());
+    const newList = new GroceryList([...groceryList.items]);
+    newList.deleteItem(index);
+    setGroceryList(newList);
   };
 
   const updateItem = (index, name) => {
-    groceryList.updateItem(index, name);
-    setGroceryList(new GroceryList());
+    const newList = new GroceryList([...groceryList.items]);
+    newList.updateItem(index, name);
+    setGroceryList(newList);
   };
+
+  const deleteAllItems = () => {
+    const newList = new GroceryList([]);
+    newList.deleteAllItems();
+    setGroceryList(newList);
+  }
 
   return (
     <View>
@@ -50,7 +58,7 @@ const GroceryListComponent = () => {
         <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
         <Dialog.Button label="Add" onPress={addItem} />
       </Dialog.Container>
-      <Button title="Delete All" onPress={() => setGroceryList(new GroceryList([]))} color="red" />
+      <Button title="Delete All" onPress={deleteAllItems} color="red" />
       <Text>{groceryList.items.map((item) => item.name).join(', ')}</Text>
     </View>
   );
