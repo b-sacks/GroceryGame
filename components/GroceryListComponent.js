@@ -16,7 +16,7 @@ const GroceryListComponent = () => {
     if (!newItemName.trim()) {
       return;
     }
-    const newList = new GroceryList([...groceryList.items]);
+    const newList = new GroceryList();
     newList.addItem(newItemName);
     setNewItemName('');
     setGroceryList(newList);
@@ -24,19 +24,19 @@ const GroceryListComponent = () => {
   };
 
   const deleteItem = (index) => {
-    const newList = new GroceryList([...groceryList.items]);
+    const newList = new GroceryList();
     newList.deleteItem(index);
     setGroceryList(newList);
   };
 
   const updateItem = (index, name) => {
-    const newList = new GroceryList([...groceryList.items]);
+    const newList = new GroceryList();
     newList.updateItem(index, name);
     setGroceryList(newList);
   };
 
   const deleteAllItems = () => {
-    const newList = new GroceryList([]);
+    const newList = new GroceryList();
     newList.deleteAllItems();
     setGroceryList(newList);
   }
