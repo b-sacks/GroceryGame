@@ -4,6 +4,7 @@ const Item = require('./services/Item');
 const React = require('react');
 const { useState } = React;
 const GroceryListComponent = require('./components/GroceryListComponent');
+import 'react-native-get-random-values';
 
 // export default function App() {
 //   const [itemName, setItemName] = useState('apple');

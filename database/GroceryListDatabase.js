@@ -1,5 +1,5 @@
 const Realm = require('realm');
-const GroceryList = require('../services/GroceryList');
+const { Platform } = require('react-native');
 
 const GroceryListSchema = {
   name: 'GroceryList',
@@ -17,7 +17,11 @@ const ItemSchema = {
   },
 };
 
-const realm = new Realm({schema: [GroceryListSchema, ItemSchema]});
+const realmPath = Platform.select({
+  ios: Realm.defaultPath
+});
+const realm = new Realm({schema: [GroceryListSchema, ItemSchema], deleteRealmIfMigrationNeeded: true, path: realmPath});
+console.log('Realm file path:', realmPath);
 
 function saveGroceryList(groceryList) {
   if (!realm.isInTransaction) {

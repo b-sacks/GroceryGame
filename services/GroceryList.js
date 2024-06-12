@@ -10,9 +10,9 @@ const Realm = require('realm');
 
 class GroceryList {
   
-  constructor() {
-    this.items = [];
+  constructor(items=[]) {
     db.loadGroceryList(this);
+    this.items = items;
   }
 
   // Your methods go here.

@@ -16,7 +16,7 @@ const GroceryListComponent = () => {
     if (!newItemName.trim()) {
       return;
     }
-    const newList = new GroceryList();
+    const newList = new GroceryList(groceryList.items.slice());
     newList.addItem(newItemName);
     setNewItemName('');
     setGroceryList(newList);
@@ -24,19 +24,19 @@ const GroceryListComponent = () => {
   };
 
   const deleteItem = (index) => {
-    const newList = new GroceryList();
+    const newList = new GroceryList(groceryList.items.slice());
     newList.deleteItem(index);
     setGroceryList(newList);
   };
 
   const updateItem = (index, name) => {
-    const newList = new GroceryList();
+    const newList = new GroceryList(groceryList.items.slice());
     newList.updateItem(index, name);
     setGroceryList(newList);
   };
 
   const deleteAllItems = () => {
-    const newList = new GroceryList();
+    const newList = new GroceryList(groceryList.items.slice());
     newList.deleteAllItems();
     setGroceryList(newList);
   }
@@ -59,7 +59,7 @@ const GroceryListComponent = () => {
         <Dialog.Button label="Add" onPress={addItem} />
       </Dialog.Container>
       <Button title="Delete All" onPress={deleteAllItems} color="red" />
-      <Text>{groceryList.items.map((item) => item.name).join(', ')}</Text>
+      <Text>{groceryList.items.map((item, index) => item.name + index).join(', ')}</Text>
     </View>
   );
 };
