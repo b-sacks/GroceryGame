@@ -17,11 +17,11 @@ const ItemSchema = {
   },
 };
 
-const realmPath = Platform.select({
-  ios: Realm.defaultPath
-});
-const realm = new Realm({schema: [GroceryListSchema, ItemSchema], deleteRealmIfMigrationNeeded: true, path: realmPath});
-console.log('Realm file path:', realmPath);
+// const realmPath = Platform.select({
+//   ios: Realm.defaultPath
+// });
+const realm = new Realm({schema: [GroceryListSchema, ItemSchema]});
+// console.log('Realm file path:', realmPath);
 
 function saveGroceryList(groceryList) {
   if (!realm.isInTransaction) {
