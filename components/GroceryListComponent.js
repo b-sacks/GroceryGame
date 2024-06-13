@@ -16,7 +16,7 @@ const GroceryListComponent = () => {
     if (!newItemName.trim()) {
       return;
     }
-    const newList = new GroceryList(groceryList.items.slice());
+    const newList = new GroceryList();
     newList.addItem(newItemName);
     setNewItemName('');
     setGroceryList(newList);
@@ -24,26 +24,26 @@ const GroceryListComponent = () => {
   };
 
   const deleteItem = (index) => {
-    const newList = new GroceryList(groceryList.items.slice());
+    const newList = new GroceryList();
     newList.deleteItem(index);
     setGroceryList(newList);
   };
 
   const updateItem = (index, name) => {
-    const newList = new GroceryList(groceryList.items.slice());
+    const newList = new GroceryList();
     newList.updateItem(index, name);
     setGroceryList(newList);
   };
 
   const deleteAllItems = () => {
-    const newList = new GroceryList(groceryList.items.slice());
+    const newList = new GroceryList();
     newList.deleteAllItems();
     setGroceryList(newList);
   }
 
   return (
     <View>
-      {groceryList.items.map((item, index) => (
+      {async () => await groceryList.getItems().map((item, index) => (
         <ItemComponent
           key={index}
           item={item}
@@ -59,7 +59,7 @@ const GroceryListComponent = () => {
         <Dialog.Button label="Add" onPress={addItem} />
       </Dialog.Container>
       <Button title="Delete All" onPress={deleteAllItems} color="red" />
-      <Text>{groceryList.items.map((item, index) => item.name + index).join(', ')}</Text>
+      <Text>{async () => groceryList.getItems().map((item, index) => item.name + index).join(', ')}</Text>
     </View>
   );
 };

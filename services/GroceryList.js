@@ -6,29 +6,35 @@ store items as a list of item ids.
 */
 
 const db = require('../database/GroceryListDatabase');
-const Realm = require('realm');
 
 class GroceryList {
   
-  constructor(items=[]) {
-    db.loadGroceryList(this);
-    this.items = items;
+  constructor() {
+    this.initialize();
+  }
+
+  async initialize() {
+    await db.getGroceryList();
   }
 
   // Your methods go here.
-  addItem(name) {
-    db.addItemToGroceryList(this, name);
+  async addItem(name) {
+    await db.addItem(name);
   }
 
-  deleteItem(index) {
-    db.deleteItem(this, index);
+  async deleteItem(index) {
+    await db.deleteItem(index);
   }
 
-  deleteAllItems() {
-    db.deleteAllItems(this);
+  async deleteAllItems() {
+    await db.deleteAllItems();
   }    
-  updateItem(index, name) {
-    db.updateItem(this, index, name);
+  async updateItem(index, name) {
+    await db.updateItem(index, name);
+  }
+
+  async getItems() {
+    return await db.getGroceryList();
   }
 }
 

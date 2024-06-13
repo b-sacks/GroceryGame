@@ -1,87 +1,65 @@
-const Realm = require('realm');
-const { Platform } = require('react-native');
+const AsyncStorage = require('@react-native-async-storage/async-storage');
 
-const GroceryListSchema = {
-  name: 'GroceryList',
-  primaryKey: 'id',
-  properties: {
-    id: 'int',
-    items: 'Item[]',
-  },
-};
+const groceryListKey = 'groceryList';
 
-const ItemSchema = {
-  name: 'Item',
-  properties: {
-    name: 'string',
-  },
-};
-
-// const realmPath = Platform.select({
-//   ios: Realm.defaultPath
-// });
-const realm = new Realm({schema: [GroceryListSchema, ItemSchema]});
-// console.log('Realm file path:', realmPath);
-
-function saveGroceryList(groceryList) {
-  if (!realm.isInTransaction) {
-    realm.write(() => {
-      let existingGroceryList = realm.objects('GroceryList');
-      if (existingGroceryList.length === 0) {
-        // If no GroceryList exists, create one with a default id
-        groceryList.id = 1;
-      }
-      realm.create('GroceryList', groceryList, 'modified');
-    });
+const addItem = async (item) => {
+  try {
+    const groceryList = await AsyncStorage.getItem(groceryListKey);
+    if (groceryList !== null) {
+      const newGroceryList = JSON.parse(groceryList).push(item);
+      const jsonGroceryList = JSON.stringify(newGroceryList);
+      await AsyncStorage.setItem(groceryListKey, jsonGroceryList);
+    } else {
+      const jsonGroceryList = JSON.stringify([item]);
+      await AsyncStorage.setItem(groceryListKey, jsonGroceryList);
+    }
+  } catch (e) {
+    console.error('Adding error:', e);
   }
 }
 
-function getGroceryList() {
-  return realm.objects('GroceryList');
-}
-
-function addItemToGroceryList(groceryList, name) {
-  if (!realm.isInTransaction) {
-    realm.write(() => {
-      const item = { name: name };
-      groceryList.items.push(item);
-      saveGroceryList(groceryList);
-    });
+const deleteItem = async (index) => {
+  try {
+    const groceryList = await AsyncStorage.getItem(groceryListKey);
+    const newGroceryList = JSON.parse(groceryList).splice(index, 1);
+    const jsonGroceryList = JSON.stringify(newGroceryList);
+    await AsyncStorage.setItem(groceryListKey, jsonGroceryList);
+  } catch (e) {
+    console.error('Deleting error:', e);
   }
 }
 
-function deleteItem(groceryList, index) {
-  if (!realm.isInTransaction) {
-    realm.write(() => {
-      groceryList.items.splice(index, 1);
-      saveGroceryList(groceryList);
-    });
+const deleteAllItems = async () => {
+  try {
+    await AsyncStorage.clear();
+  } catch (e) {
+    console.error('Delete All error:', e);
   }
 }
 
-function deleteAllItems(groceryList) {
-  if (!realm.isInTransaction) {
-    for (let i = groceryList.items.length - 1; i >= 0; i--)
-      deleteItem(groceryList, i);
+const updateItem = async (index, name) => {
+  try {
+    const groceryList = await AsyncStorage.getItem(groceryListKey);
+    const newGroceryList = JSON.parse(groceryList);
+    newGroceryList[index] = name;
+    const jsonGroceryList = JSON.stringify(newGroceryList);
+    await AsyncStorage.setItem(groceryListKey, jsonGroceryList);
+  } catch (e) {
+    console.error('Update Item error:', e);
   }
 }
 
-function updateItem(groceryList, index, name) {
-  if (!realm.isInTransaction) {
-    realm.write(() => {
-      const item = groceryList.items[index];
-      if (item) {
-        item.name = name;
-        saveGroceryList(groceryList);
-      }
-    });
+const getGroceryList = async () => {
+  try {
+    const groceryList = await AsyncStorage.getItem(groceryListKey);
+    if (groceryList !== null) {
+      return JSON.parse(groceryList);
+    } else {
+      return [];
+    }
+  } catch (e) {
+    console.error('Get Grocery List error:', e);
   }
 }
 
-function loadGroceryList(groceryList) {
-  getGroceryList().forEach((list) => {
-    groceryList.items = list.items;
-  });
-}
-
-module.exports = {saveGroceryList, getGroceryList, addItemToGroceryList, deleteItem, deleteAllItems, updateItem, loadGroceryList};
+module.exports = {getGroceryList, addItem, deleteItem, deleteAllItems, updateItem};
