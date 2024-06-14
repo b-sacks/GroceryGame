@@ -6,9 +6,9 @@ const ItemComponent = require('./ItemComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
 
-const GroceryListComponent = () => {
+const MasterListComponent = () => {
   const [newItemName, setNewItemName] = useState('');
-  const [groceryList, setGroceryList] = useState(new GroceryList('groceryList'));
+  const [groceryList, setGroceryList] = useState(new GroceryList('masterList'));
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [items, setItems] = useState([]);
 
@@ -25,7 +25,7 @@ const GroceryListComponent = () => {
     if (!newItemName.trim()) {
       return;
     }
-    const newList = new GroceryList('groceryList');
+    const newList = new GroceryList('masterList');
     await newList.addItem(newItemName);
     setNewItemName('');
     setGroceryList(newList);
@@ -33,19 +33,19 @@ const GroceryListComponent = () => {
   };
 
   const deleteItem = async (index) => {
-    const newList = new GroceryList('groceryList');
+    const newList = new GroceryList('masterList');
     await newList.deleteItem(index);
     setGroceryList(newList);
   };
 
   const updateItem = async (index, name) => {
-    const newList = new GroceryList('groceryList');
+    const newList = new GroceryList('masterList');
     await newList.updateItem(index, name);
     setGroceryList(newList);
   };
 
   const deleteAllItems = async () => {
-    const newList = new GroceryList('groceryList');
+    const newList = new GroceryList('masterList');
     await newList.deleteAllItems();
     setGroceryList(newList);
   }
@@ -73,4 +73,4 @@ const GroceryListComponent = () => {
   );
 };
 
-module.exports = GroceryListComponent;
+module.exports = MasterListComponent;
