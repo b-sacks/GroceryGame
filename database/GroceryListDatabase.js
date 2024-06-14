@@ -1,12 +1,14 @@
-const AsyncStorage = require('@react-native-async-storage/async-storage');
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const groceryListKey = 'groceryList';
 
 const addItem = async (item) => {
+  // await AsyncStorage.clear();
   try {
     const groceryList = await AsyncStorage.getItem(groceryListKey);
     if (groceryList !== null) {
-      const newGroceryList = JSON.parse(groceryList).push(item);
+      const newGroceryList = JSON.parse(groceryList);
+      newGroceryList.push(item);
       const jsonGroceryList = JSON.stringify(newGroceryList);
       await AsyncStorage.setItem(groceryListKey, jsonGroceryList);
     } else {
@@ -21,7 +23,8 @@ const addItem = async (item) => {
 const deleteItem = async (index) => {
   try {
     const groceryList = await AsyncStorage.getItem(groceryListKey);
-    const newGroceryList = JSON.parse(groceryList).splice(index, 1);
+    const newGroceryList = JSON.parse(groceryList);
+    newGroceryList.splice(index, 1);
     const jsonGroceryList = JSON.stringify(newGroceryList);
     await AsyncStorage.setItem(groceryListKey, jsonGroceryList);
   } catch (e) {

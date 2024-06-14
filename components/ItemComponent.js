@@ -9,7 +9,7 @@ const ItemComponent = ({ item, onDelete, onUpdate }) => {
   const [inputText, setInputText] = useState('');
 
   const handleEdit = () => {
-    setInputText(item.name);
+    setInputText(item);
     setDialogVisible(true);
   };
 
@@ -25,7 +25,7 @@ const ItemComponent = ({ item, onDelete, onUpdate }) => {
 
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-      <Text>{item.name}</Text>
+      <Text>{item}</Text>
       <Button title="Edit" onPress={handleEdit} />
       <Button title="Delete" onPress={onDelete} />
 

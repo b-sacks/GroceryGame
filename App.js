@@ -1,6 +1,5 @@
 const { StatusBar } = require('expo-status-bar');
 const { StyleSheet, Text, View, TextInput } = require('react-native');
-const Item = require('./services/Item');
 const React = require('react');
 const { useState } = React;
 const GroceryListComponent = require('./components/GroceryListComponent');

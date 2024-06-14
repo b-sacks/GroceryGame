@@ -1,49 +1,58 @@
 // components/GroceryListComponent.js
 const React = require('react');
-const { useState } = React;
+const { useState, useEffect } = React;
 const { View, Button, TextInput, Text } = require('react-native');
 const ItemComponent = require('./ItemComponent');
 const GroceryList = require('../services/GroceryList');
-const Item = require('../services/Item');
 import Dialog from "react-native-dialog";
 
 const GroceryListComponent = () => {
   const [newItemName, setNewItemName] = useState('');
   const [groceryList, setGroceryList] = useState(new GroceryList());
   const [isDialogVisible, setDialogVisible] = useState(false);
+  const [items, setItems] = useState([]);
 
-  const addItem = () => {
+  useEffect(() => {
+    const fetchItems = async () => {
+      const fetchedItems = await groceryList.getItems();
+      setItems(fetchedItems);
+    };
+
+    fetchItems();
+  }, [groceryList]);
+
+  const addItem = async () => {
     if (!newItemName.trim()) {
       return;
     }
     const newList = new GroceryList();
-    newList.addItem(newItemName);
+    await newList.addItem(newItemName);
     setNewItemName('');
     setGroceryList(newList);
     setDialogVisible(false);
   };
 
-  const deleteItem = (index) => {
+  const deleteItem = async (index) => {
     const newList = new GroceryList();
-    newList.deleteItem(index);
+    await newList.deleteItem(index);
     setGroceryList(newList);
   };
 
-  const updateItem = (index, name) => {
+  const updateItem = async (index, name) => {
     const newList = new GroceryList();
-    newList.updateItem(index, name);
+    await newList.updateItem(index, name);
     setGroceryList(newList);
   };
 
-  const deleteAllItems = () => {
+  const deleteAllItems = async () => {
     const newList = new GroceryList();
-    newList.deleteAllItems();
+    await newList.deleteAllItems();
     setGroceryList(newList);
   }
 
   return (
     <View>
-      {async () => await groceryList.getItems().map((item, index) => (
+      {items.map((item, index) => (
         <ItemComponent
           key={index}
           item={item}
@@ -59,7 +68,7 @@ const GroceryListComponent = () => {
         <Dialog.Button label="Add" onPress={addItem} />
       </Dialog.Container>
       <Button title="Delete All" onPress={deleteAllItems} color="red" />
-      <Text>{async () => groceryList.getItems().map((item, index) => item.name + index).join(', ')}</Text>
+      <Text>{items.map((item, index) => index + ': ' + item).join(', ')}</Text>
     </View>
   );
 };
