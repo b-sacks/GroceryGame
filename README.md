@@ -4,7 +4,7 @@ This is an app that helps you manage your grocery shopping list.
 
 ## Workflow Doc
 
-https://docs.google.com/document/d/1eViRS9ULNMJRaJwmiJKYrWIrI57_2v5ifvItTkjiClc/edit?pli=1
+[Workflow Doc](https://docs.google.com/document/d/1eViRS9ULNMJRaJwmiJKYrWIrI57_2v5ifvItTkjiClc/edit?pli=1)
 
 ## First Iteration
 
