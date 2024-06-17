@@ -11,11 +11,11 @@ class GroceryList {
   
   constructor(key) {
     this.key = key;
-    this.initialize();
+    this.initialize(key);
   }
 
-  async initialize() {
-    await db.getGroceryList();
+  async initialize(key) {
+    await db.getGroceryList(key);
   }
 
   // Your methods go here.
