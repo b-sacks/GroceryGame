@@ -10,6 +10,10 @@ This is an app that helps you manage your grocery shopping list.
 
 Add, modify, and delete items from your grocery list. Storage will persist inbetween runs with realm.
 
+## Workflow Doc
+
+[Workflow Doc](https://docs.google.com/document/d/1eViRS9ULNMJRaJwmiJKYrWIrI57_2v5ifvItTkjiClc/edit?pli=1)
+
 ## Desired End Result
 
 - Multiple screens
