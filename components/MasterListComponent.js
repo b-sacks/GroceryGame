@@ -77,7 +77,7 @@ const MasterListComponent = () => {
           <Dialog.Button label="Add" onPress={addItem} />
         </Dialog.Container>
         <Button title="Delete All" onPress={deleteAllItems} color="red" />
-        <Text>{items.map((item, index) => index + ': ' + item).join(', ')}</Text>
+        <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
       </View>
     </ScrollView>
   );

@@ -24,7 +24,7 @@ const MasterItemComponent = ({ item, onDelete, onUpdate, onAddToGroceryList }) =
   };
 
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 7 }}>
       <Text style={{paddingTop: 11}}>{item}</Text>
       <Button title="Edit" onPress={handleEdit} />
       <Button title="Add to Grocery List" onPress={onAddToGroceryList} />

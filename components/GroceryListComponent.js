@@ -12,10 +12,19 @@ const GroceryListComponent = () => {
   const [groceryList, setGroceryList] = useState(new GroceryList('groceryList'));
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [items, setItems] = useState([]);
+  const [checkedItems, setCheckedItems] = useState([]);
 
   const fetchItems = async () => {
     const fetchedItems = await groceryList.getItems();
     setItems(fetchedItems);
+  };
+
+  const handleCheck = (item, isChecked) => {
+    if (isChecked) {
+      setCheckedItems([...checkedItems, item]);
+    } else {
+      setCheckedItems(checkedItems.filter(i => i !== item));
+    }
   };
 
   useFocusEffect(
@@ -57,6 +66,24 @@ const GroceryListComponent = () => {
     setGroceryList(newList);
   }
 
+  const uncheckItems = () => {
+    setCheckedItems([]);
+  };
+
+  // const checkAllItems = () => {
+  //   setCheckedItems(items);
+  // }
+
+  const clearCheckedItems = async () => {
+    const newList = new GroceryList('groceryList');
+    for (const item of checkedItems) {
+      const index = items.indexOf(item);
+      await newList.deleteItem(index);
+    }
+    setGroceryList(newList);
+    uncheckItems();
+  }
+
   return (
     <ScrollView keyboardShouldPersistTaps='always'>
       <View style={{paddingTop: 20}}>
@@ -66,9 +93,14 @@ const GroceryListComponent = () => {
             item={item}
             onDelete={() => deleteItem(index)}
             onUpdate={(name) => updateItem(index, name)}
+            onCheck={(isChecked) => handleCheck(item, isChecked)}
+            isChecked={checkedItems.includes(item)}
           />
         ))}
         <Button title="Add Item" onPress={() => setDialogVisible(true)} />
+        <Button title="Uncheck All Items" onPress={uncheckItems} />
+        {/* <Button title="Check All Items" onPress={checkAllItems} /> */}
+        <Button title="Clear Checked Items" onPress={clearCheckedItems} />
         <Dialog.Container visible={isDialogVisible}>
           <Dialog.Title>Add Item</Dialog.Title>
           <Dialog.Input onChangeText={setNewItemName} placeholder="Enter item name" autoFocus={true} />
@@ -76,7 +108,7 @@ const GroceryListComponent = () => {
           <Dialog.Button label="Add" onPress={addItem} />
         </Dialog.Container>
         <Button title="Delete All" onPress={deleteAllItems} color="red" />
-        <Text>{items.map((item, index) => index + ': ' + item).join(', ')}</Text>
+        <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
       </View>
     </ScrollView>
   );
