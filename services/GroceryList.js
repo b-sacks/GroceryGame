@@ -9,32 +9,34 @@ const db = require('../database/GroceryListDatabase');
 
 class GroceryList {
   
-  constructor() {
-    this.initialize();
+  constructor(key) {
+    this.key = key;
+    this.initialize(key);
   }
 
-  async initialize() {
-    await db.getGroceryList();
+  async initialize(key) {
+    await db.getGroceryList(key);
   }
 
   // Your methods go here.
   async addItem(name) {
-    await db.addItem(name);
+    await db.addItem(name, this.key);
   }
 
   async deleteItem(index) {
-    await db.deleteItem(index);
+    await db.deleteItem(index, this.key);
   }
 
-  async deleteAllItems() {
-    await db.deleteAllItems();
-  }    
+  async deleteAllItems(key) {
+    await db.deleteAllItems(this.key);
+  }
+
   async updateItem(index, name) {
-    await db.updateItem(index, name);
+    await db.updateItem(index, name, this.key);
   }
 
   async getItems() {
-    return await db.getGroceryList();
+    return await db.getGroceryList(this.key);
   }
 }
 

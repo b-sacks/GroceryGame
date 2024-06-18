@@ -3,37 +3,22 @@ const React = require('react');
 const { useState, useEffect } = React;
 const { View, Button, TextInput, Text, ScrollView } = require('react-native');
 const ItemComponent = require('./ItemComponent');
+const MasterItemComponent = require('./MasterItemComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
-import { useFocusEffect } from '@react-navigation/native';
 
-const GroceryListComponent = () => {
+const MasterListComponent = () => {
   const [newItemName, setNewItemName] = useState('');
-  const [groceryList, setGroceryList] = useState(new GroceryList('groceryList'));
+  const [groceryList, setGroceryList] = useState(new GroceryList('masterList'));
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [items, setItems] = useState([]);
-  const [checkedItems, setCheckedItems] = useState([]);
-
-  const fetchItems = async () => {
-    const fetchedItems = await groceryList.getItems();
-    setItems(fetchedItems);
-  };
-
-  const handleCheck = (item, isChecked) => {
-    if (isChecked) {
-      setCheckedItems([...checkedItems, item]);
-    } else {
-      setCheckedItems(checkedItems.filter(i => i !== item));
-    }
-  };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchItems();
-    }, [groceryList])
-  );
 
   useEffect(() => {
+    const fetchItems = async () => {
+      const fetchedItems = await groceryList.getItems();
+      setItems(fetchedItems);
+    };
+
     fetchItems();
   }, [groceryList]);
 
@@ -41,7 +26,7 @@ const GroceryListComponent = () => {
     if (!newItemName.trim()) {
       return;
     }
-    const newList = new GroceryList('groceryList');
+    const newList = new GroceryList('masterList');
     await newList.addItem(newItemName);
     setNewItemName('');
     setGroceryList(newList);
@@ -49,58 +34,42 @@ const GroceryListComponent = () => {
   };
 
   const deleteItem = async (index) => {
-    const newList = new GroceryList('groceryList');
+    const newList = new GroceryList('masterList');
     await newList.deleteItem(index);
     setGroceryList(newList);
   };
 
   const updateItem = async (index, name) => {
-    const newList = new GroceryList('groceryList');
+    const newList = new GroceryList('masterList');
     await newList.updateItem(index, name);
     setGroceryList(newList);
   };
 
   const deleteAllItems = async () => {
-    const newList = new GroceryList('groceryList');
+    const newList = new GroceryList('masterList');
     await newList.deleteAllItems();
     setGroceryList(newList);
   }
 
-  const uncheckItems = () => {
-    setCheckedItems([]);
-  };
-
-  // const checkAllItems = () => {
-  //   setCheckedItems(items);
-  // }
-
-  const clearCheckedItems = async () => {
-    const newList = new GroceryList('groceryList');
-    for (const item of checkedItems) {
-      const index = items.indexOf(item);
-      await newList.deleteItem(index);
-    }
-    setGroceryList(newList);
-    uncheckItems();
+  const addToGroceryList = async (index) => {
+    const groceryList = new GroceryList('groceryList');
+    const item = items[index];
+    await groceryList.addItem(item);
   }
 
   return (
     <ScrollView keyboardShouldPersistTaps='always'>
       <View style={{paddingTop: 20}}>
         {items.map((item, index) => (
-          <ItemComponent
+          <MasterItemComponent
             key={index}
             item={item}
             onDelete={() => deleteItem(index)}
             onUpdate={(name) => updateItem(index, name)}
-            onCheck={(isChecked) => handleCheck(item, isChecked)}
-            isChecked={checkedItems.includes(item)}
+            onAddToGroceryList={() => addToGroceryList(index)}
           />
         ))}
         <Button title="Add Item" onPress={() => setDialogVisible(true)} />
-        <Button title="Uncheck All Items" onPress={uncheckItems} />
-        {/* <Button title="Check All Items" onPress={checkAllItems} /> */}
-        <Button title="Clear Checked Items" onPress={clearCheckedItems} />
         <Dialog.Container visible={isDialogVisible}>
           <Dialog.Title>Add Item</Dialog.Title>
           <Dialog.Input onChangeText={setNewItemName} placeholder="Enter item name" autoFocus={true} />
@@ -114,4 +83,4 @@ const GroceryListComponent = () => {
   );
 };
 
-module.exports = GroceryListComponent;
+module.exports = MasterListComponent;

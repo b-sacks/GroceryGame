@@ -3,30 +3,23 @@ const { StyleSheet, Text, View, TextInput } = require('react-native');
 const React = require('react');
 const { useState } = React;
 const GroceryListComponent = require('./components/GroceryListComponent');
+const MasterListComponent = require('./components/MasterListComponent');
 import 'react-native-get-random-values';
+import 'react-native-screens';
+import 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-// export default function App() {
-//   const [itemName, setItemName] = useState('apple');
-//   const item = new Item(itemName);
-//   return (
-//     <View style={styles.container}>
-//       <Text>Open up App.js to start working on your app!</Text>
-//       <TextInput
-//         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-//         onChangeText={text => setItemName(text)}
-//         value={itemName}
-//       />
-//       <Text>{item.name}</Text>
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <View style={{ paddingTop: 50 }}>
-      <GroceryListComponent />
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="Grocery List" component={GroceryListComponent} />
+        <Tab.Screen name="Master List" component={MasterListComponent} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 };
 
