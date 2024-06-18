@@ -6,6 +6,11 @@ This is an app that helps you manage your grocery shopping list.
 
 [Workflow Doc](https://docs.google.com/document/d/1eViRS9ULNMJRaJwmiJKYrWIrI57_2v5ifvItTkjiClc/edit?pli=1)
 
+## How To Run App
+
+1. fill in here
+2. fill in more here
+
 ## First Iteration
 
 Add, modify, and delete items from your grocery list. Storage will persist inbetween runs with realm.
