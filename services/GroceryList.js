@@ -29,7 +29,8 @@ class GroceryList {
 
   async deleteAllItems(key) {
     await db.deleteAllItems(this.key);
-  }    
+  }
+
   async updateItem(index, name) {
     await db.updateItem(index, name, this.key);
   }
