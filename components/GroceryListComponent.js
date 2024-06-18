@@ -58,7 +58,7 @@ const GroceryListComponent = () => {
   }
 
   return (
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps='always'>
       <View style={{paddingTop: 20}}>
         {items.map((item, index) => (
           <ItemComponent
@@ -71,7 +71,7 @@ const GroceryListComponent = () => {
         <Button title="Add Item" onPress={() => setDialogVisible(true)} />
         <Dialog.Container visible={isDialogVisible}>
           <Dialog.Title>Add Item</Dialog.Title>
-          <Dialog.Input onChangeText={setNewItemName} placeholder="Enter item name" />
+          <Dialog.Input onChangeText={setNewItemName} placeholder="Enter item name" autoFocus={true} />
           <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
           <Dialog.Button label="Add" onPress={addItem} />
         </Dialog.Container>

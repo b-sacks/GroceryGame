@@ -31,7 +31,7 @@ const ItemComponent = ({ item, onDelete, onUpdate }) => {
 
       <Dialog.Container visible={isDialogVisible}>
         <Dialog.Title>Edit Item</Dialog.Title>
-        <Dialog.Input value={inputText} onChangeText={setInputText} />
+        <Dialog.Input value={inputText} onChangeText={setInputText} autoFocus={true} />
         <Dialog.Button label="Cancel" onPress={handleCancel} />
         <Dialog.Button label="Save" onPress={handleSave} />
       </Dialog.Container>
