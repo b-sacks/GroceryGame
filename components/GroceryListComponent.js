@@ -11,6 +11,8 @@ const GroceryListComponent = () => {
   const [newItemName, setNewItemName] = useState('');
   const [groceryList, setGroceryList] = useState(new GroceryList('groceryList'));
   const [isDialogVisible, setDialogVisible] = useState(false);
+  const [isItemExistsDialogVisible, setItemExistsDialogVisible] = useState(false);
+  const [isDeleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
   const [items, setItems] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
 
@@ -38,14 +40,17 @@ const GroceryListComponent = () => {
   }, [groceryList]);
 
   const addItem = async () => {
-    if (!newItemName.trim()) {
+    setDialogVisible(false);
+    if (!newItemName.trim() || isInList(newItemName)) {
+      setTimeout(() => {
+        setItemExistsDialogVisible(true);
+      }, 400);
       return;
     }
     const newList = new GroceryList('groceryList');
     await newList.addItem(newItemName);
     setNewItemName('');
     setGroceryList(newList);
-    setDialogVisible(false);
   };
 
   const deleteItem = async (index) => {
@@ -55,12 +60,23 @@ const GroceryListComponent = () => {
   };
 
   const updateItem = async (index, name) => {
+    if (items[index] === name) {
+      return;
+    }
+
+    if (isInList(name)) {
+      setTimeout(() => {
+        setItemExistsDialogVisible(true);
+      }, 400);
+      return;
+    }
     const newList = new GroceryList('groceryList');
     await newList.updateItem(index, name);
     setGroceryList(newList);
   };
 
   const deleteAllItems = async () => {
+    setDeleteAllDialogVisible(false);
     const newList = new GroceryList('groceryList');
     await newList.deleteAllItems();
     setGroceryList(newList);
@@ -82,6 +98,12 @@ const GroceryListComponent = () => {
     }
     setGroceryList(newList);
     uncheckItems();
+  }
+
+  const isInList = (name) => {
+    // not case sensitive or whitespace sensitive
+    name = name.trim().toLowerCase();
+    return items.map(i => i.trim().toLowerCase()).includes(name);
   }
 
   return (
@@ -107,7 +129,18 @@ const GroceryListComponent = () => {
           <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
           <Dialog.Button label="Add" onPress={addItem} />
         </Dialog.Container>
-        <Button title="Delete All" onPress={deleteAllItems} color="red" />
+        <Dialog.Container visible={isDeleteAllDialogVisible}>
+          <Dialog.Title>Delete All Items</Dialog.Title>
+          <Dialog.Description>Are you sure?</Dialog.Description>
+          <Dialog.Button label="Cancel" onPress={() => setDeleteAllDialogVisible(false)} />
+          <Dialog.Button label="Delete All" onPress={deleteAllItems} color="red" />
+        </Dialog.Container>
+        <Dialog.Container visible={isItemExistsDialogVisible}>
+          <Dialog.Title>Item Exists</Dialog.Title>
+          <Dialog.Description>Item already in the list. Please pick a different name.</Dialog.Description>
+          <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
+        </Dialog.Container>
+        <Button title="Delete All" onPress={() => setDeleteAllDialogVisible(true)} color="red" />
         <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
       </View>
     </ScrollView>

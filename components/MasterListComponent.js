@@ -11,6 +11,9 @@ const MasterListComponent = () => {
   const [newItemName, setNewItemName] = useState('');
   const [groceryList, setGroceryList] = useState(new GroceryList('masterList'));
   const [isDialogVisible, setDialogVisible] = useState(false);
+  const [isItemExistsDialogVisible, setItemExistsDialogVisible] = useState(false);
+  const [itemExistsDialogMessage, setItemExistsDialogMessage] = useState('');
+  const [isDeleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -23,14 +26,18 @@ const MasterListComponent = () => {
   }, [groceryList]);
 
   const addItem = async () => {
-    if (!newItemName.trim()) {
+    setDialogVisible(false);
+    if (!newItemName.trim() || isInList(newItemName)) {
+      setTimeout(() => {
+        setItemExistsDialogMessage('Item already in the master list. Please pick a different name.');
+        setItemExistsDialogVisible(true);
+      }, 400);
       return;
     }
     const newList = new GroceryList('masterList');
     await newList.addItem(newItemName);
     setNewItemName('');
     setGroceryList(newList);
-    setDialogVisible(false);
   };
 
   const deleteItem = async (index) => {
@@ -40,12 +47,24 @@ const MasterListComponent = () => {
   };
 
   const updateItem = async (index, name) => {
+    if (items[index] === name) {
+      return;
+    }
+
+    if (isInList(name)) {
+      setTimeout(() => {
+        setItemExistsDialogMessage('Item already in the master list. Please pick a different name.');
+        setItemExistsDialogVisible(true);
+      }, 400);
+      return;
+    }
     const newList = new GroceryList('masterList');
     await newList.updateItem(index, name);
     setGroceryList(newList);
   };
 
   const deleteAllItems = async () => {
+    setDeleteAllDialogVisible(false);
     const newList = new GroceryList('masterList');
     await newList.deleteAllItems();
     setGroceryList(newList);
@@ -54,7 +73,20 @@ const MasterListComponent = () => {
   const addToGroceryList = async (index) => {
     const groceryList = new GroceryList('groceryList');
     const item = items[index];
+    trimmed = item.trim().toLowerCase();
+    const groceryItems = await groceryList.getItems();
+    if (groceryItems.map(i => i.trim().toLowerCase()).includes(trimmed)) {
+      setItemExistsDialogMessage('Item already in the grocery list. Please pick a different name.');
+      setItemExistsDialogVisible(true);
+      return;
+    }
     await groceryList.addItem(item);
+  }
+
+  const isInList = (name) => {
+    // not case sensitive or whitespace sensitive
+    name = name.trim().toLowerCase();
+    return items.map(i => i.trim().toLowerCase()).includes(name);
   }
 
   return (
@@ -76,7 +108,18 @@ const MasterListComponent = () => {
           <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
           <Dialog.Button label="Add" onPress={addItem} />
         </Dialog.Container>
-        <Button title="Delete All" onPress={deleteAllItems} color="red" />
+        <Dialog.Container visible={isDeleteAllDialogVisible}>
+          <Dialog.Title>Delete All Items</Dialog.Title>
+          <Dialog.Description>Are you sure?</Dialog.Description>
+          <Dialog.Button label="Cancel" onPress={() => setDeleteAllDialogVisible(false)} />
+          <Dialog.Button label="Delete All" onPress={deleteAllItems} color="red" />
+        </Dialog.Container>
+        <Dialog.Container visible={isItemExistsDialogVisible}>
+          <Dialog.Title>Item Exists</Dialog.Title>
+          <Dialog.Description>{itemExistsDialogMessage}</Dialog.Description>
+          <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
+        </Dialog.Container>
+        <Button title="Delete All" onPress={() => setDeleteAllDialogVisible(true)} color="red" />
         <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
       </View>
     </ScrollView>

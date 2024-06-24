@@ -10,18 +10,18 @@ const ItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
   const [inputText, setInputText] = useState('');
 
   const handleEdit = () => {
-    setInputText(item);
     setDialogVisible(true);
+    setInputText(item);
   };
 
   const handleSave = () => {
-    onUpdate(inputText);
     setDialogVisible(false);
+    onUpdate(inputText);
   };
 
   const handleCancel = () => {
-    setInputText('');
     setDialogVisible(false);
+    setInputText('');
   };
 
   return (
