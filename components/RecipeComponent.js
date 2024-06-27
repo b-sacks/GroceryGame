@@ -9,9 +9,9 @@ const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
 import { useFocusEffect } from '@react-navigation/native';
 
-const RecipeComponent = (recipeID, onDeleteRecipe) => {
+const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
   const [newItemName, setNewItemName] = useState('');
-  const [groceryList, setGroceryList] = useState(new GroceryList('groceryList'));
+  const [groceryList, setGroceryList] = useState(new GroceryList(recipeName));
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [isItemExistsDialogVisible, setItemExistsDialogVisible] = useState(false);
   const [isDeleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
@@ -40,14 +40,14 @@ const RecipeComponent = (recipeID, onDeleteRecipe) => {
       }, 400);
       return;
     }
-    const newList = new GroceryList(recipeID);
+    const newList = new GroceryList(recipeName);
     await newList.addItem(newItemName);
     setNewItemName('');
     setGroceryList(newList);
   };
 
   const deleteItem = async (index) => {
-    const newList = new GroceryList(recipeID);
+    const newList = new GroceryList(recipeName);
     await newList.deleteItem(index);
     setGroceryList(newList);
   };
@@ -63,14 +63,14 @@ const RecipeComponent = (recipeID, onDeleteRecipe) => {
       }, 400);
       return;
     }
-    const newList = new GroceryList(recipeID);
+    const newList = new GroceryList(recipeName);
     await newList.updateItem(index, name);
     setGroceryList(newList);
   };
 
   const deleteAllItems = async () => {
     setDeleteAllDialogVisible(false);
-    const newList = new GroceryList(recipeID);
+    const newList = new GroceryList(recipeName);
     await newList.deleteAllItems();
     setGroceryList(newList);
   }
@@ -83,6 +83,8 @@ const RecipeComponent = (recipeID, onDeleteRecipe) => {
 
   return (
     <ScrollView keyboardShouldPersistTaps='always'>
+      <Text style={{fontSize: 20, textAlign: 'center'}}>{recipeName}</Text>
+
       <View style={{paddingTop: 20}}>
         {items.map((item, index) => (
           <RecipeItemComponent
@@ -112,7 +114,7 @@ const RecipeComponent = (recipeID, onDeleteRecipe) => {
           <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
         </Dialog.Container>
 
-        <Button title="Delete All" onPress={onDeleteRecipe} color="red" />
+        <Button title="Delete Recipe" onPress={onDeleteRecipe} color="red" />
         <Button title="Delete All Items From Recipe" onPress={() => setDeleteAllDialogVisible(true)} color="red" />
         <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
       </View>

@@ -4,82 +4,82 @@
 const React = require('react');
 const { useState, useEffect } = React;
 const { View, Button, TextInput, Text, ScrollView } = require('react-native');
-const RecipeItemComponent = require('./RecipeItemComponent');
+const RecipeComponent = require('./RecipeComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
 import { useFocusEffect } from '@react-navigation/native';
 
 const RecipeListComponent = () => {
 
-  const [newItemName, setNewItemName] = useState('');
-  const [recipeList, setRecipeList] = useState(new GroceryList('recipeList'));
-
+  const [newRecipeName, setNewRecipeName] = useState('');
   const [isDialogVisible, setDialogVisible] = useState(false);
-  const [isItemExistsDialogVisible, setItemExistsDialogVisible] = useState(false);
-  const [isDeleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
-
-  const fetchItems = async () => {
-    const fetchedItems = await recipeList.getItems();
-    setItems(fetchedItems);
-  };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchItems();
-    }, [recipeList])
-  );
-
-  useEffect(() => {
-    fetchItems();
-  }, [recipeList]);
+  const [recipes, setRecipes] = useState([]);
 
   const addRecipe = async () => {
-    setDialogVisible(false);
-    if (!newItemName.trim() || isInList(newItemName)) {
-      setTimeout(() => {
-        setItemExistsDialogVisible(true);
-      }, 400);
+    if (!newRecipeName.trim()) {
+      // Optionally handle validation or feedback here
       return;
     }
-    const newList = new GroceryList(recipeID);
-    await newList.addItem(newItemName);
-    setNewItemName('');
-    setRecipeList(newList);
+    const newList = new GroceryList(newRecipeName);
+    setRecipes([...recipes, newList]);
+    setNewRecipeName('');
+    setDialogVisible(false);
   };
+
+  // const fetchItems = async () => {
+  //   const fetchedItems = await recipeList.getItems();
+  //   setItems(fetchedItems);
+  // };
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     fetchItems();
+  //   }, [recipeList])
+  // );
+
+  // useEffect(() => {
+  //   fetchItems();
+  // }, [recipeList]);
+
+  // const addRecipe = async () => {
+  //   setDialogVisible(false);
+  //   if (!newItemName.trim() || isInList(newItemName)) {
+  //     setTimeout(() => {
+  //       setItemExistsDialogVisible(true);
+  //     }, 400);
+  //     return;
+  //   }
+  //   const newList = new GroceryList(recipeID);
+  //   await newList.addItem(newItemName);
+  //   setNewItemName('');
+  //   setRecipeList(newList);
+  // };
 
   return (
     <ScrollView keyboardShouldPersistTaps='always'>
       <View style={{paddingTop: 20}}>
-        {items.map((item, index) => (
-          <RecipeItemComponent
+        {recipes.map((groceryList, index) => (
+          <RecipeComponent
             key={index}
-            item={item}
-            onDelete={() => deleteItem(index)}
-            onUpdate={(name) => updateItem(index, name)}
+            onDeleteRecipe={() => {
+              const newRecipes = recipes.filter((_, i) => i !== index);
+              setRecipes(newRecipes);
+            }}
+            recipeName={groceryList.key}
           />
         ))}
-        <Button title="Add Recipe" onPress={ null } />
+        <Button title="Add Recipe" onPress={() => setDialogVisible(true)} />
 
         <Dialog.Container visible={isDialogVisible}>
-          <Dialog.Title>Add Item</Dialog.Title>
-          <Dialog.Input onChangeText={setNewItemName} placeholder="Enter item name" autoFocus={true} />
+          <Dialog.Title>Add Recipe</Dialog.Title>
+          <Dialog.Input
+            onChangeText={setNewRecipeName}
+            placeholder="Enter recipe name"
+            autoFocus={true}
+          />
           <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
           <Dialog.Button label="Add" onPress={addRecipe} />
         </Dialog.Container>
-        <Dialog.Container visible={isDeleteAllDialogVisible}>
-          <Dialog.Title>Delete All Items</Dialog.Title>
-          <Dialog.Description>Are you sure?</Dialog.Description>
-          <Dialog.Button label="Cancel" onPress={() => setDeleteAllDialogVisible(false)} />
-          <Dialog.Button label="Delete All" onPress={deleteAllItems} color="red" />
-        </Dialog.Container>
-        <Dialog.Container visible={isItemExistsDialogVisible}>
-          <Dialog.Title>Item Exists</Dialog.Title>
-          <Dialog.Description>Item already in the list. Please pick a different name.</Dialog.Description>
-          <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
-        </Dialog.Container>
-        
-        <Button title="Delete All Recipes" onPress={() => setDeleteAllDialogVisible(true)} color="red" />
-        <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
       </View>
     </ScrollView>
   );
