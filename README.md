@@ -8,8 +8,9 @@ This is an app that helps you manage your grocery shopping list.
 
 ## How To Run App
 
-1. fill in here
-2. fill in more here
+1. npm install
+2. npx expo install expo-dev-client
+3. npx expo start OR npx expo run:ios
 
 ## First Iteration
 

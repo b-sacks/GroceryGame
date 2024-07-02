@@ -12,10 +12,11 @@ import { useFocusEffect } from '@react-navigation/native';
 const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
   const [newItemName, setNewItemName] = useState('');
   const [groceryList, setGroceryList] = useState(new GroceryList(recipeName));
+  const [items, setItems] = useState([]);
+  
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [isItemExistsDialogVisible, setItemExistsDialogVisible] = useState(false);
   const [isDeleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
-  const [items, setItems] = useState([]);
 
   const fetchItems = async () => {
     const fetchedItems = await groceryList.getItems();

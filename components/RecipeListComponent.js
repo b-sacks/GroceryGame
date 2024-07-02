@@ -7,13 +7,22 @@ const { View, Button, TextInput, Text, ScrollView } = require('react-native');
 const RecipeComponent = require('./RecipeComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
-import { useFocusEffect } from '@react-navigation/native';
+const { getRecipes } = require('../database/GroceryListDatabase');
 
 const RecipeListComponent = () => {
 
   const [newRecipeName, setNewRecipeName] = useState('');
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      const fetchedRecipes = await getRecipes();
+      setRecipes(fetchedRecipes);
+    };
+
+    fetchRecipes();
+  }, []);
 
   const addRecipe = async () => {
     if (!newRecipeName.trim()) {
