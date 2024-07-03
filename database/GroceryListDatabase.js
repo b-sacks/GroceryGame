@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const addItem = async (item, key) => {
-  // await AsyncStorage.clear();
   try {
     const groceryList = await AsyncStorage.getItem(key);
     if (groceryList !== null) {
@@ -16,6 +15,7 @@ const addItem = async (item, key) => {
   } catch (e) {
     console.error('Adding error:', e);
   }
+  // await clearDatabase();
 }
 
 const deleteItem = async (index, key) => {

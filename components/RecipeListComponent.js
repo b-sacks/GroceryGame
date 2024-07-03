@@ -7,13 +7,22 @@ const { View, Button, TextInput, Text, ScrollView } = require('react-native');
 const RecipeComponent = require('./RecipeComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
-import { useFocusEffect } from '@react-navigation/native';
+const { getRecipes, deleteRecipe } = require('../database/RecipeDatabase');
 
 const RecipeListComponent = () => {
 
   const [newRecipeName, setNewRecipeName] = useState('');
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      const fetchedRecipes = await getRecipes();
+      setRecipes(fetchedRecipes);
+    };
+
+    fetchRecipes();
+  }, []);
 
   const addRecipe = async () => {
     if (!newRecipeName.trim()) {
@@ -26,35 +35,6 @@ const RecipeListComponent = () => {
     setDialogVisible(false);
   };
 
-  // const fetchItems = async () => {
-  //   const fetchedItems = await recipeList.getItems();
-  //   setItems(fetchedItems);
-  // };
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     fetchItems();
-  //   }, [recipeList])
-  // );
-
-  // useEffect(() => {
-  //   fetchItems();
-  // }, [recipeList]);
-
-  // const addRecipe = async () => {
-  //   setDialogVisible(false);
-  //   if (!newItemName.trim() || isInList(newItemName)) {
-  //     setTimeout(() => {
-  //       setItemExistsDialogVisible(true);
-  //     }, 400);
-  //     return;
-  //   }
-  //   const newList = new GroceryList(recipeID);
-  //   await newList.addItem(newItemName);
-  //   setNewItemName('');
-  //   setRecipeList(newList);
-  // };
-
   return (
     <ScrollView keyboardShouldPersistTaps='always'>
       <View style={{paddingTop: 20}}>
@@ -64,6 +44,7 @@ const RecipeListComponent = () => {
             onDeleteRecipe={() => {
               const newRecipes = recipes.filter((_, i) => i !== index);
               setRecipes(newRecipes);
+              deleteRecipe(groceryList.key);
             }}
             recipeName={groceryList.key}
           />
