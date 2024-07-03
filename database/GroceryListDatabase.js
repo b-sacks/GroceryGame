@@ -15,7 +15,7 @@ const addItem = async (item, key) => {
   } catch (e) {
     console.error('Adding error:', e);
   }
-  await clearDatabase();
+  // await clearDatabase();
 }
 
 const deleteItem = async (index, key) => {
@@ -71,21 +71,4 @@ const getGroceryList = async (key) => {
   }
 }
 
-const getRecipes = async () => {
-  try {
-    const keys = await AsyncStorage.getAllKeys();
-    if (keys === null) {
-      return [];
-    }
-    keys.filter(key => (key !== 'groceryList' || key !== 'masterList'));
-    const recipes = await Promise.all(keys.map(async (key) => {
-      const item = await AsyncStorage.getItem(key);
-      return JSON.parse(item);
-    }));
-    return recipes;
-  } catch (e) {
-    console.error('Get Recipes error:', e);
-  }
-};
-
-module.exports = {getGroceryList, addItem, deleteItem, deleteAllItems, updateItem, getRecipes};
+module.exports = {getGroceryList, addItem, deleteItem, deleteAllItems, updateItem};
