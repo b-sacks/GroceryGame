@@ -82,6 +82,15 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
     return items.map(i => i.trim().toLowerCase()).includes(name);
   }
 
+  const addToGroceryList = async () => {
+    const groceryList = new GroceryList('groceryList');
+    const groceryListItems = await groceryList.getItems();
+    const itemsToAdd = items.filter(item => !groceryListItems.includes(item));
+    for (const item of itemsToAdd) {
+      await groceryList.addItem(item);
+    }
+  }
+
   return (
     <ScrollView keyboardShouldPersistTaps='always'>
       <Text style={{fontSize: 20, textAlign: 'center'}}>{recipeName}</Text>
@@ -115,8 +124,9 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
           <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
         </Dialog.Container>
 
-        <Button title="Delete Recipe" onPress={onDeleteRecipe} color="red" />
+        <Button title="Add Recipe To Grocery List" onPress={addToGroceryList} />
         <Button title="Delete All Items From Recipe" onPress={() => setDeleteAllDialogVisible(true)} color="red" />
+        <Button title="Delete Recipe" onPress={onDeleteRecipe} color="red" />
         <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
       </View>
     </ScrollView>
