@@ -21,7 +21,9 @@ const ItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
 
   const handleCancel = () => {
     setDialogVisible(false);
-    setInputText('');
+    setTimeout(() => {
+      setInputText('');
+    }, 400);
   };
 
   return (

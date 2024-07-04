@@ -4,6 +4,7 @@ const React = require('react');
 const { useState } = React;
 const GroceryListComponent = require('./components/GroceryListComponent');
 const MasterListComponent = require('./components/MasterListComponent');
+const RecipeListComponent = require('./components/RecipeListComponent');
 import 'react-native-get-random-values';
 import 'react-native-screens';
 import 'react-native-safe-area-context';
@@ -18,6 +19,7 @@ export default function App() {
       <Tab.Navigator>
         <Tab.Screen name="Grocery List" component={GroceryListComponent} />
         <Tab.Screen name="Master List" component={MasterListComponent} />
+        <Tab.Screen name="Recipe List" component={RecipeListComponent} />
       </Tab.Navigator>
     </NavigationContainer>
   );
