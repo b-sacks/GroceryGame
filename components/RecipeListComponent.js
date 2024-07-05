@@ -8,6 +8,7 @@ const RecipeComponent = require('./RecipeComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
 const { getRecipes, deleteRecipe } = require('../database/RecipeDatabase');
+import { useFocusEffect } from '@react-navigation/native';
 
 const RecipeListComponent = () => {
 
@@ -15,12 +16,18 @@ const RecipeListComponent = () => {
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [recipes, setRecipes] = useState([]);
 
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      const fetchedRecipes = await getRecipes();
-      setRecipes(fetchedRecipes);
-    };
+  const fetchRecipes = async () => {
+    const fetchedRecipes = await getRecipes();
+    setRecipes(fetchedRecipes);
+  };
 
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     fetchRecipes();
+  //   }, [])
+  // );
+
+  useEffect(() => {
     fetchRecipes();
   }, []);
 
@@ -40,11 +47,11 @@ const RecipeListComponent = () => {
       <View style={{paddingTop: 20}}>
         {recipes.map((groceryList, index) => (
           <RecipeComponent
-            key={index}
-            onDeleteRecipe={() => {
+            key={`${index}-${recipes.length}`}
+            onDeleteRecipe={async () => {
               const newRecipes = recipes.filter((_, i) => i !== index);
               setRecipes(newRecipes);
-              deleteRecipe(groceryList.key);
+              await deleteRecipe(groceryList.key);
             }}
             recipeName={groceryList.key}
           />

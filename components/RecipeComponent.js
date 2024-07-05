@@ -23,15 +23,15 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
     setItems(fetchedItems);
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchItems();
-    }, [groceryList])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     fetchItems();
+  //   }, [])
+  // );
 
   useEffect(() => {
     fetchItems();
-  }, [groceryList]);
+  }, [items]);
 
   const addItem = async () => {
     setDialogVisible(false);

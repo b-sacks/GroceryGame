@@ -1,6 +1,6 @@
 const GroceryList = require('../services/GroceryList');
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const { getGroceryList } = require('./GroceryListDatabase');
+const { getGroceryList, deleteAllItems } = require('./GroceryListDatabase');
 
 const getRecipes = async () => {
   try {
