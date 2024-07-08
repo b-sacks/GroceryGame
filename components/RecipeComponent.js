@@ -18,6 +18,7 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [isItemExistsDialogVisible, setItemExistsDialogVisible] = useState(false);
   const [isDeleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
+  const [isDeleteRecipeDialogVisible, setDeleteRecipeDialogVisible] = useState(false);
 
   const fetchItems = async () => {
     const fetchedItems = await groceryList.getItems();
@@ -144,6 +145,12 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
           <Dialog.Button label="Cancel" onPress={() => setDeleteAllDialogVisible(false)} />
           <Dialog.Button label="Delete All" onPress={deleteAllItems} color="red" />
         </Dialog.Container>
+        <Dialog.Container visible={isDeleteRecipeDialogVisible}>
+          <Dialog.Title>Delete Recipe</Dialog.Title>
+          <Dialog.Description>Are you sure?</Dialog.Description>
+          <Dialog.Button label="Cancel" onPress={() => setDeleteRecipeDialogVisible(false)} />
+          <Dialog.Button label="Delete" onPress={onDeleteRecipe} color="red" />
+        </Dialog.Container>
         <Dialog.Container visible={isItemExistsDialogVisible}>
           <Dialog.Title>Item Exists</Dialog.Title>
           <Dialog.Description>Item already in the list. Please pick a different name.</Dialog.Description>
@@ -156,7 +163,7 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
           disabled={isRecipeInGroceryList}
         />
         <Button title="Delete All Items From Recipe" onPress={() => setDeleteAllDialogVisible(true)} color="red" />
-        <Button title="Delete Recipe" onPress={onDeleteRecipe} color="red" />
+        <Button title="Delete Recipe" onPress={() => setDeleteRecipeDialogVisible(true)} color="red" />
         <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
       </View>
     </ScrollView>
