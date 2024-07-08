@@ -35,9 +35,9 @@ const GroceryListComponent = () => {
     }, [groceryList])
   );
 
-  useEffect(() => {
-    fetchItems();
-  }, [groceryList]);
+  // useEffect(() => {
+  //   fetchItems();
+  // }, [groceryList]);
 
   const addItem = async () => {
     setDialogVisible(false);
