@@ -10,6 +10,7 @@ import 'react-native-screens';
 import 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+// const GroceryListNavigator = require('./navigation/GroceryListNavigator');
 
 const Tab = createBottomTabNavigator();
 
@@ -17,7 +18,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Grocery List" component={GroceryListComponent} />
+        <Tab.Screen name="Grocery List" component={GroceryListComponent} options={{ headerShown: false }} />
         <Tab.Screen name="Master List" component={MasterListComponent} />
         <Tab.Screen name="Recipe List" component={RecipeListComponent} />
       </Tab.Navigator>
