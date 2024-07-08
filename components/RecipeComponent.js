@@ -13,6 +13,7 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
   const [newItemName, setNewItemName] = useState('');
   const [groceryList, setGroceryList] = useState(new GroceryList(recipeName));
   const [items, setItems] = useState([]);
+  const [isRecipeInGroceryList, setIsRecipeInGroceryList] = useState(false);
   
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [isItemExistsDialogVisible, setItemExistsDialogVisible] = useState(false);
@@ -23,15 +24,17 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
     setItems(fetchedItems);
   };
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     fetchItems();
-  //   }, [])
-  // );
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchItems();
+      isInGroceryList();
+    }, [groceryList, isRecipeInGroceryList])
+  );
 
-  useEffect(() => {
-    fetchItems();
-  }, [items]);
+  // useEffect(() => {
+  //   fetchItems();
+  //   isInGroceryList();
+  // }, [groceryList, isRecipeInGroceryList]);
 
   const addItem = async () => {
     setDialogVisible(false);
@@ -44,14 +47,20 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
     const newList = new GroceryList(recipeName);
     await newList.addItem(newItemName);
     setNewItemName('');
+    await fetchItems();
     setGroceryList(newList);
   };
 
   const deleteItem = async (index) => {
     const newList = new GroceryList(recipeName);
     await newList.deleteItem(index);
+    await fetchItems();
     setGroceryList(newList);
   };
+
+  function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+  }
 
   const updateItem = async (index, name) => {
     if (items[index] === name) {
@@ -66,6 +75,7 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
     }
     const newList = new GroceryList(recipeName);
     await newList.updateItem(index, name);
+    await fetchItems();
     setGroceryList(newList);
   };
 
@@ -73,6 +83,7 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
     setDeleteAllDialogVisible(false);
     const newList = new GroceryList(recipeName);
     await newList.deleteAllItems();
+    await fetchItems();
     setGroceryList(newList);
   }
 
@@ -89,6 +100,21 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
     for (const item of itemsToAdd) {
       await groceryList.addItem(item);
     }
+    setIsRecipeInGroceryList(true);
+  }
+
+  const isInGroceryList = async () => {
+    await fetchItems();
+    const groceryList = new GroceryList('groceryList');
+    const groceryListItems = await groceryList.getItems();
+    for (const item of items) {
+      if (!groceryListItems.includes(item)) {
+        setIsRecipeInGroceryList(false);
+        return;
+      }
+    }
+    setIsRecipeInGroceryList(true);
+    return;
   }
 
   return (
@@ -124,7 +150,11 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
           <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
         </Dialog.Container>
 
-        <Button title="Add Recipe To Grocery List" onPress={addToGroceryList} />
+        <Button
+          title={isRecipeInGroceryList ? "Recipe Already In Grocery List": "Add Recipe To Grocery List"}
+          onPress={addToGroceryList}
+          disabled={isRecipeInGroceryList}
+        />
         <Button title="Delete All Items From Recipe" onPress={() => setDeleteAllDialogVisible(true)} color="red" />
         <Button title="Delete Recipe" onPress={onDeleteRecipe} color="red" />
         <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
