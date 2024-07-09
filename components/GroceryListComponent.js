@@ -130,7 +130,7 @@ const GroceryListComponent = () => {
         <View style={{paddingTop: 15}}>
           {items.map((item, index) => (
             <ItemComponent
-              key={index}
+              key={`${index}-${items.length}`}
               item={item}
               onDelete={() => deleteItem(index)}
               onUpdate={(name) => updateItem(index, name)}
@@ -159,7 +159,7 @@ const GroceryListComponent = () => {
             <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
           </Dialog.Container>
           {/* <Button title="Delete All" onPress={() => setDeleteAllDialogVisible(true)} color="red" /> */}
-          {/* <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text> */}
+          <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
         </View>
       </ScrollView>
     </View>
