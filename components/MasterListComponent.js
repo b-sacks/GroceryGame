@@ -1,7 +1,7 @@
 // components/GroceryListComponent.js
 const React = require('react');
 const { useState, useEffect } = React;
-const { View, Button, TextInput, Text, ScrollView } = require('react-native');
+const { View, Button, TextInput, Text, ScrollView, StyleSheet, TouchableOpacity } = require('react-native');
 const ItemComponent = require('./ItemComponent');
 const MasterItemComponent = require('./MasterItemComponent');
 const GroceryList = require('../services/GroceryList');
@@ -90,40 +90,98 @@ const MasterListComponent = () => {
   }
 
   return (
-    <ScrollView keyboardShouldPersistTaps='always'>
-      <View style={{paddingTop: 20}}>
-        {items.map((item, index) => (
-          <MasterItemComponent
-            key={index}
-            item={item}
-            onDelete={() => deleteItem(index)}
-            onUpdate={(name) => updateItem(index, name)}
-            onAddToGroceryList={() => addToGroceryList(index)}
-          />
-        ))}
-        <Button title="Add Item" onPress={() => setDialogVisible(true)} />
-        <Dialog.Container visible={isDialogVisible}>
-          <Dialog.Title>Add Item</Dialog.Title>
-          <Dialog.Input onChangeText={setNewItemName} placeholder="Enter item name" autoFocus={true} />
-          <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
-          <Dialog.Button label="Add" onPress={addItem} />
-        </Dialog.Container>
-        <Dialog.Container visible={isDeleteAllDialogVisible}>
-          <Dialog.Title>Delete All Items</Dialog.Title>
-          <Dialog.Description>Are you sure?</Dialog.Description>
-          <Dialog.Button label="Cancel" onPress={() => setDeleteAllDialogVisible(false)} />
-          <Dialog.Button label="Delete All" onPress={deleteAllItems} color="red" />
-        </Dialog.Container>
-        <Dialog.Container visible={isItemExistsDialogVisible}>
-          <Dialog.Title>Item Exists</Dialog.Title>
-          <Dialog.Description>{itemExistsDialogMessage}</Dialog.Description>
-          <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
-        </Dialog.Container>
-        <Button title="Delete All" onPress={() => setDeleteAllDialogVisible(true)} color="red" />
-        <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
+    <View style={{flex: 1}}>
+      <View style={styles.header}>
+        <View style={styles.clearAllButton}>
+          <TouchableOpacity style={styles.clearAllButton} onPress={() => setDeleteAllDialogVisible(true)}>
+            <Text style={styles.clearAllButtonText}>Clear All</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.title}>Master List</Text>
+        <View style={styles.addButton}>
+          <TouchableOpacity style={styles.addButton} onPress={() => setDialogVisible(true)}>
+            <Text style={styles.addButtonText}>+</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </ScrollView>
+      <ScrollView keyboardShouldPersistTaps='always'>
+        <View style={{paddingTop: 20}}>
+          {items.map((item, index) => (
+            <MasterItemComponent
+              key={index}
+              item={item}
+              onDelete={() => deleteItem(index)}
+              onUpdate={(name) => updateItem(index, name)}
+              onAddToGroceryList={() => addToGroceryList(index)}
+            />
+          ))}
+          {/* <Button title="Add Item" onPress={() => setDialogVisible(true)} /> */}
+          <Dialog.Container visible={isDialogVisible}>
+            <Dialog.Title>Add Item</Dialog.Title>
+            <Dialog.Input onChangeText={setNewItemName} placeholder="Enter item name" autoFocus={true} />
+            <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
+            <Dialog.Button label="Add" onPress={addItem} />
+          </Dialog.Container>
+          <Dialog.Container visible={isDeleteAllDialogVisible}>
+            <Dialog.Title>Delete All Items</Dialog.Title>
+            <Dialog.Description>Are you sure?</Dialog.Description>
+            <Dialog.Button label="Cancel" onPress={() => setDeleteAllDialogVisible(false)} />
+            <Dialog.Button label="Delete All" onPress={deleteAllItems} color="red" />
+          </Dialog.Container>
+          <Dialog.Container visible={isItemExistsDialogVisible}>
+            <Dialog.Title>Item Exists</Dialog.Title>
+            <Dialog.Description>{itemExistsDialogMessage}</Dialog.Description>
+            <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
+          </Dialog.Container>
+          {/* <Button title="Delete All" onPress={() => setDeleteAllDialogVisible(true)} color="red" /> */}
+          {/* <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text> */}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  header: {
+    height: 110,
+    justifyContent: 'center', // Center vertically
+    alignItems: 'center', // Center horizontally
+    backgroundColor: 'white',
+    borderWidth: 0.1,
+    borderColor: 'gray',
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 0.5 },
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    },
+  title: {
+    position: 'absolute', // Make sure text is centered absolutely
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingTop: 50,
+  },
+  addButton: {
+    position: 'absolute',
+    right: 15,
+    marginTop: 1,
+  },
+  addButtonText: {
+    fontSize: 35, // Set your desired font size here
+    fontWeight: 'bold',
+    color: 'blue',
+  },
+  clearAllButton: {
+    position: 'absolute',
+    left: 8,
+    marginTop: 19,
+  },
+  clearAllButtonText: {
+    fontSize: 13, // Set your desired font size here
+    fontWeight: 'bold',
+    color: 'red',
+  },
+  
+});
 
 module.exports = MasterListComponent;

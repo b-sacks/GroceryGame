@@ -19,8 +19,8 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Grocery List" component={GroceryListComponent} options={{ headerShown: false }} />
-        <Tab.Screen name="Master List" component={MasterListComponent} />
-        <Tab.Screen name="Recipe List" component={RecipeListComponent} />
+        <Tab.Screen name="Master List" component={MasterListComponent} options={{ headerShown: false }} />
+        <Tab.Screen name="Recipe List" component={RecipeListComponent} options={{ headerShown: false }} />
       </Tab.Navigator>
     </NavigationContainer>
   );

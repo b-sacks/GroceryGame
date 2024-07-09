@@ -195,7 +195,8 @@ const styles = StyleSheet.create({
     fontSize: 35, // Set your desired font size here
     fontWeight: 'bold',
     color: 'blue',
-  },clearAllButton: {
+  },
+  clearAllButton: {
     position: 'absolute',
     left: 8,
   },
