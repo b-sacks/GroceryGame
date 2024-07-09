@@ -141,27 +141,28 @@ const GroceryListComponent = () => {
           {/* <Button title="Uncheck All Items" onPress={uncheckItems} /> */}
           {/* <Button title="Check All Items" onPress={checkAllItems} /> */}
           {/* <Button title="Clear Checked Items" onPress={clearCheckedItems} /> */}
-          <Dialog.Container visible={isDialogVisible}>
-            <Dialog.Title>Add Item</Dialog.Title>
-            <Dialog.Input onChangeText={setNewItemName} placeholder="Enter item name" autoFocus={true} />
-            <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
-            <Dialog.Button label="Add" onPress={addItem} />
-          </Dialog.Container>
-          <Dialog.Container visible={isDeleteAllDialogVisible}>
-            <Dialog.Title>Delete All Items</Dialog.Title>
-            <Dialog.Description>Are you sure?</Dialog.Description>
-            <Dialog.Button label="Cancel" onPress={() => setDeleteAllDialogVisible(false)} />
-            <Dialog.Button label="Delete All" onPress={deleteAllItems} color="red" />
-          </Dialog.Container>
-          <Dialog.Container visible={isItemExistsDialogVisible}>
-            <Dialog.Title>Item Exists</Dialog.Title>
-            <Dialog.Description>Item already in the list. Please pick a different name.</Dialog.Description>
-            <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
-          </Dialog.Container>
+          
           {/* <Button title="Delete All" onPress={() => setDeleteAllDialogVisible(true)} color="red" /> */}
           {/* <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text> */}
         </View>
       </ScrollView>
+      <Dialog.Container visible={isDialogVisible}>
+        <Dialog.Title>Add Item</Dialog.Title>
+        <Dialog.Input onChangeText={setNewItemName} placeholder="Enter item name" autoFocus={true} />
+        <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
+        <Dialog.Button label="Add" onPress={addItem} />
+      </Dialog.Container>
+      <Dialog.Container visible={isDeleteAllDialogVisible}>
+        <Dialog.Title>Delete All Items</Dialog.Title>
+        <Dialog.Description>Are you sure?</Dialog.Description>
+        <Dialog.Button label="Cancel" onPress={() => setDeleteAllDialogVisible(false)} />
+        <Dialog.Button label="Delete All" onPress={deleteAllItems} color="red" />
+      </Dialog.Container>
+      <Dialog.Container visible={isItemExistsDialogVisible}>
+        <Dialog.Title>Item Exists</Dialog.Title>
+        <Dialog.Description>Item already in the list. Please pick a different name.</Dialog.Description>
+        <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
+      </Dialog.Container>
     </View>
   );
 };
