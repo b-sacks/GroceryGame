@@ -39,7 +39,7 @@ const ItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
       <Swipeable renderRightActions={renderSwipe} onSwipeableOpen={onDelete}>
         <View style={styles.container}>
           <TouchableOpacity onPress={handleEdit}>
-            <Text>{item}</Text>
+            <Text style={styles.name}>{item}</Text>
           </TouchableOpacity>
           {/* <Button title="Edit" onPress={handleEdit} /> */}
           {/* <Button title="Delete" onPress={onDelete} /> */}
@@ -65,21 +65,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 15,
-    paddingVertical: 5,
+    paddingVertical: 6,
     alignItems: 'center',
     borderWidth: 0.2,
     borderColor: 'gray',
   },
-  deleteButton: {
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 75,
-    height: '100%',
-  },
-  deleteButtonText: {
-    color: 'white',
-  },
+  name :{
+    fontSize: 17,
+  }
 });
 
 module.exports = ItemComponent;

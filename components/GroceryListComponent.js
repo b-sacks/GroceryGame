@@ -159,7 +159,7 @@ const GroceryListComponent = () => {
             <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
           </Dialog.Container>
           {/* <Button title="Delete All" onPress={() => setDeleteAllDialogVisible(true)} color="red" /> */}
-          <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
+          {/* <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text> */}
         </View>
       </ScrollView>
     </View>
