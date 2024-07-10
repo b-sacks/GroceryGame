@@ -125,7 +125,7 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
       <View style={{paddingTop: 20}}>
         {items.map((item, index) => (
           <RecipeItemComponent
-            key={index}
+            key={`${index}-${items.length}`}
             item={item}
             onDelete={() => deleteItem(index)}
             onUpdate={(name) => updateItem(index, name)}

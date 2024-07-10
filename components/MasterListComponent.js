@@ -105,10 +105,10 @@ const MasterListComponent = () => {
         </View>
       </View>
       <ScrollView keyboardShouldPersistTaps='always'>
-        <View style={{paddingTop: 20}}>
+        <View style={{paddingTop: 15}}>
           {items.map((item, index) => (
             <MasterItemComponent
-              key={index}
+              key={`${index}-${items.length}`}
               item={item}
               onDelete={() => deleteItem(index)}
               onUpdate={(name) => updateItem(index, name)}
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   clearAllButton: {
     position: 'absolute',
     left: 8,
-    marginTop: 19,
+    marginTop: 20,
   },
   clearAllButtonText: {
     fontSize: 13, // Set your desired font size here
