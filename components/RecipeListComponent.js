@@ -9,6 +9,7 @@ const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
 const { getRecipes, deleteRecipe } = require('../database/RecipeDatabase');
 import { useFocusEffect } from '@react-navigation/native';
+const { recipeListStyles } = require('../styles/RecipeListStyles');
 
 const RecipeListComponent = () => {
 
@@ -44,15 +45,15 @@ const RecipeListComponent = () => {
 
   return (
     <View style={{flex: 1}}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Recipes</Text>
-        <View style={styles.addButton}>
-          <TouchableOpacity style={styles.addButton} onPress={() => setDialogVisible(true)}>
-            <Text style={styles.addButtonText}>+</Text>
+      <View style={recipeListStyles.header}>
+        <Text style={recipeListStyles.title}>Recipes</Text>
+        <View style={recipeListStyles.addButton}>
+          <TouchableOpacity style={recipeListStyles.addButton} onPress={() => setDialogVisible(true)}>
+            <Text style={recipeListStyles.addButtonText}>+</Text>
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView keyboardShouldPersistTaps='always'>
+      <ScrollView keyboardShouldPersistTaps='always' backgroundColor='#F0F0E3'>
         <View style={{paddingTop: 20}}>
           {recipes.map((groceryList, index) => (
             <RecipeComponent
@@ -82,38 +83,5 @@ const RecipeListComponent = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    height: 110,
-    justifyContent: 'center', // Center vertically
-    alignItems: 'center', // Center horizontally
-    backgroundColor: 'white',
-    borderWidth: 0.1,
-    borderColor: 'gray',
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 0.5 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    },
-  title: {
-    position: 'absolute', // Make sure text is centered absolutely
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight: 'bold',
-    paddingTop: 50,
-  },
-  addButton: {
-    position: 'absolute',
-    right: 15,
-    marginTop: 1,
-  },
-  addButtonText: {
-    fontSize: 35, // Set your desired font size here
-    fontWeight: 'bold',
-    color: 'blue',
-  },
-  
-});
 
 module.exports = RecipeListComponent;

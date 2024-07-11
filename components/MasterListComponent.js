@@ -6,6 +6,7 @@ const ItemComponent = require('./ItemComponent');
 const MasterItemComponent = require('./MasterItemComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
+const { masterListStyles } = require('../styles/MasterListStyles');
 
 const MasterListComponent = () => {
   const [newItemName, setNewItemName] = useState('');
@@ -91,20 +92,20 @@ const MasterListComponent = () => {
 
   return (
     <View style={{flex: 1}}>
-      <View style={styles.header}>
-        <View style={styles.clearAllButton}>
-          <TouchableOpacity style={styles.clearAllButton} onPress={() => setDeleteAllDialogVisible(true)}>
-            <Text style={styles.clearAllButtonText}>Clear All</Text>
+      <View style={masterListStyles.header}>
+        <View style={masterListStyles.clearAllButton}>
+          <TouchableOpacity style={masterListStyles.clearAllButton} onPress={() => setDeleteAllDialogVisible(true)}>
+            <Text style={masterListStyles.clearAllButtonText}>Clear All</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.title}>Master List</Text>
-        <View style={styles.addButton}>
-          <TouchableOpacity style={styles.addButton} onPress={() => setDialogVisible(true)}>
-            <Text style={styles.addButtonText}>+</Text>
+        <Text style={masterListStyles.title}>Master List</Text>
+        <View style={masterListStyles.addButton}>
+          <TouchableOpacity style={masterListStyles.addButton} onPress={() => setDialogVisible(true)}>
+            <Text style={masterListStyles.addButtonText}>+</Text>
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView keyboardShouldPersistTaps='always'>
+      <ScrollView keyboardShouldPersistTaps='always' backgroundColor='#F0F0E3'>
         <View style={{paddingTop: 15}}>
           {items.map((item, index) => (
             <MasterItemComponent
@@ -140,48 +141,5 @@ const MasterListComponent = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    height: 110,
-    justifyContent: 'center', // Center vertically
-    alignItems: 'center', // Center horizontally
-    backgroundColor: 'white',
-    borderWidth: 0.1,
-    borderColor: 'gray',
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 0.5 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    },
-  title: {
-    position: 'absolute', // Make sure text is centered absolutely
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight: 'bold',
-    paddingTop: 50,
-  },
-  addButton: {
-    position: 'absolute',
-    right: 15,
-    marginTop: 1,
-  },
-  addButtonText: {
-    fontSize: 35, // Set your desired font size here
-    fontWeight: 'bold',
-    color: 'blue',
-  },
-  clearAllButton: {
-    position: 'absolute',
-    left: 8,
-    marginTop: 20,
-  },
-  clearAllButtonText: {
-    fontSize: 13, // Set your desired font size here
-    fontWeight: 'bold',
-    color: 'red',
-  },
-  
-});
 
 module.exports = MasterListComponent;

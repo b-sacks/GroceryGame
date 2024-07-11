@@ -164,7 +164,7 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
         />
         <Button title="Delete All Items From Recipe" onPress={() => setDeleteAllDialogVisible(true)} color="red" />
         <Button title="Delete Recipe" onPress={() => setDeleteRecipeDialogVisible(true)} color="red" />
-        <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
+        {/* <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text> */}
       </View>
     </ScrollView>
   );

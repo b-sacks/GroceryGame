@@ -6,6 +6,7 @@ const ItemComponent = require('./ItemComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
 import { useFocusEffect } from '@react-navigation/native';
+const { groceryListStyles } = require('../styles/GroceryListStyles');
 
 const GroceryListComponent = () => {
   const [newItemName, setNewItemName] = useState('');
@@ -108,21 +109,21 @@ const GroceryListComponent = () => {
 
   return (
     <View style={{flex: 1}}>
-      <View style={styles.header}>
-        <View style={styles.clearAllButton}>
-          <TouchableOpacity style={styles.clearAllButton} onPress={() => setDeleteAllDialogVisible(true)}>
-            <Text style={styles.clearAllButtonText}>Clear All</Text>
+      <View style={groceryListStyles.header}>
+        <View style={groceryListStyles.clearAllButton}>
+          <TouchableOpacity style={groceryListStyles.clearAllButton} onPress={() => setDeleteAllDialogVisible(true)}>
+            <Text style={groceryListStyles.clearAllButtonText}>Clear All</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.clearCheckedButton}>
-          <TouchableOpacity style={styles.clearCheckedButton} onPress={clearCheckedItems}>
-            <Text style={styles.clearCheckedButtonText}>Clear Checked</Text>
+        <View style={groceryListStyles.clearCheckedButton}>
+          <TouchableOpacity style={groceryListStyles.clearCheckedButton} onPress={clearCheckedItems}>
+            <Text style={groceryListStyles.clearCheckedButtonText}>Clear Checked</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.title}>Grocery List</Text>
-        <View style={styles.addButton}>
-          <TouchableOpacity style={styles.addButton} onPress={() => setDialogVisible(true)}>
-            <Text style={styles.addButtonText}>+</Text>
+        <Text style={groceryListStyles.title}>Grocery List</Text>
+        <View style={groceryListStyles.addButton}>
+          <TouchableOpacity style={groceryListStyles.addButton} onPress={() => setDialogVisible(true)}>
+            <Text style={groceryListStyles.addButtonText}>+</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -166,58 +167,5 @@ const GroceryListComponent = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    height: 110,
-    justifyContent: 'center', // Center vertically
-    alignItems: 'center', // Center horizontally
-    backgroundColor: 'white',
-    borderWidth: 0.1,
-    borderColor: 'gray',
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 0.5 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    backgroundColor: '#DDDDC1',
-    },
-  title: {
-    position: 'absolute', // Make sure text is centered absolutely
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight: 'bold',
-    paddingTop: 50,
-  },
-  addButton: {
-    position: 'absolute',
-    right: 15,
-    marginTop: 1,
-  },
-  addButtonText: {
-    fontSize: 35, // Set your desired font size here
-    fontWeight: 'bold',
-    color: '#2F52E0',
-  },
-  clearAllButton: {
-    position: 'absolute',
-    left: 8,
-  },
-  clearAllButtonText: {
-    fontSize: 13, // Set your desired font size here
-    fontWeight: 'bold',
-    color: 'tomato',
-  },
-  clearCheckedButton: {
-    position: 'absolute',
-    left: 8,
-    marginTop: 31,
-  },
-  clearCheckedButtonText: {
-    fontSize: 13, // Set your desired font size here
-    fontWeight: 'bold',
-    color: '#2F52E0',
-  },
-  
-});
 
 module.exports = GroceryListComponent;

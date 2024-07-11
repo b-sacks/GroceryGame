@@ -4,6 +4,7 @@ const { useState, useRef } = React;
 const { View, Text, TextInput, Button, TouchableOpacity, StyleSheet, Animated } = require('react-native');
 import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Dialog from "react-native-dialog";
+const { masterListItemStyles } = require('../styles/MasterListStyles');
 
 const MasterItemComponent = ({ item, onDelete, onUpdate, onAddToGroceryList }) => {
   const [isDialogVisible, setDialogVisible] = useState(false);
@@ -36,14 +37,14 @@ const MasterItemComponent = ({ item, onDelete, onUpdate, onAddToGroceryList }) =
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Swipeable renderRightActions={renderSwipe} onSwipeableOpen={onDelete}>
-        <View style={styles.container}>
+        <View style={masterListItemStyles.listContainer}>
           <TouchableOpacity onPress={handleEdit}>
-            <Text style={styles.nameButtonText}>{item}</Text>
+            <Text style={masterListItemStyles.itemName}>{item}</Text>
           </TouchableOpacity>
           {/* <Button title="Edit" onPress={handleEdit} /> */}
-          <View style={styles.addToListButton}>
-            <TouchableOpacity style={styles.addToListButton} onPress={onAddToGroceryList}>
-              <Text style={styles.addToListButtonText}>Add to Grocery List</Text>
+          <View style={masterListItemStyles.addToListButton}>
+            <TouchableOpacity style={masterListItemStyles.addToListButton} onPress={onAddToGroceryList}>
+              <Text style={masterListItemStyles.addToListButtonText}>Add to Grocery List</Text>
             </TouchableOpacity>
           </View>
           {/* <Button title="Add to Grocery List" onPress={onAddToGroceryList} /> */}

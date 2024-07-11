@@ -5,6 +5,7 @@ const { View, Text, TextInput, Button, TouchableOpacity, StyleSheet, Animated, D
 import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Dialog from "react-native-dialog";
 import CheckBox from "@react-native-community/checkbox";
+const { groceryListItemStyles } = require('../styles/GroceryListStyles');
 
 const ItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
   const [isDialogVisible, setDialogVisible] = useState(false);
@@ -37,9 +38,9 @@ const ItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Swipeable renderRightActions={renderSwipe} onSwipeableOpen={onDelete}>
-        <View style={styles.container}>
+        <View style={groceryListItemStyles.listContainer}>
           <TouchableOpacity onPress={handleEdit}>
-            <Text style={styles.name}>{item}</Text>
+            <Text style={groceryListItemStyles.itemName}>{item}</Text>
           </TouchableOpacity>
           {/* <Button title="Edit" onPress={handleEdit} /> */}
           {/* <Button title="Delete" onPress={onDelete} /> */}
@@ -59,22 +60,5 @@ const ItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
     </GestureHandlerRootView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 15,
-    // paddingVertical: 6,
-    height: 44.5,
-    alignItems: 'center',
-    // borderWidth: 0.2,
-    // borderColor: 'gray',
-  },
-  name :{
-    fontSize: 17,
-    color: '#0A0903'
-  }
-});
 
 module.exports = ItemComponent;

@@ -5,6 +5,7 @@ const { useState, useRef } = React;
 const { View, Text, TextInput, Button, TouchableOpacity, StyleSheet, Animated } = require('react-native');
 import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Dialog from "react-native-dialog";
+const { recipeListItemStyles } = require('../styles/RecipeListStyles');
 
 const RecipeComponent = ({ item, onDelete, onUpdate }) => {
   const [isDialogVisible, setDialogVisible] = useState(false);
@@ -37,9 +38,9 @@ const RecipeComponent = ({ item, onDelete, onUpdate }) => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Swipeable renderRightActions={renderSwipe} onSwipeableOpen={onDelete}>
-        <View style={styles.container}>
+        <View style={recipeListItemStyles.listContainer}>
           <TouchableOpacity onPress={handleEdit}>
-            <Text style={styles.nameButtonText}>{item}</Text>
+            <Text style={recipeListItemStyles.itemName}>{item}</Text>
           </TouchableOpacity>
           {/* <Text style={{paddingTop: 11}}>{item}</Text> */}
           {/* <Button title="Edit" onPress={handleEdit} /> */}
@@ -56,21 +57,5 @@ const RecipeComponent = ({ item, onDelete, onUpdate }) => {
     </GestureHandlerRootView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 15,
-    // paddingVertical: 6,
-    height: 44.5,
-    alignItems: 'center',
-    borderWidth: 0.2,
-    borderColor: 'gray',
-  },
-  nameButtonText: {
-    fontSize: 17,
-  },
-});
 
 module.exports = RecipeComponent;
