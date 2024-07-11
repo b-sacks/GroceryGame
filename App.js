@@ -20,22 +20,26 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
+          tabBarIcon: ({ color, size }) => {
             let iconName;
 
-            if (route.name === 'Grocery List') {
-              iconName = focused ? 'check-circle' : 'check-circle'; // Example icon names
-            } else if (route.name === 'Master List') {
-              iconName = focused ? 'list' : 'list'; // Example icon names
-            } else if (route.name === 'Recipe List') {
-              iconName = focused ? 'book' : 'book'; // Example icon names
+            switch (route.name) {
+              case 'Grocery List':
+                iconName = 'check-circle';
+                break;
+              case 'Master List':
+                iconName = 'format-list-bulleted';
+                break;
+              case 'Recipe List':
+                iconName = 'book';
+                break;
             }
 
-            // You can return any component that you like here!
             return <MaterialIcons name={iconName} size={size} color={color} />;
           },
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'gray',
+          tabBarStyle: { backgroundColor: '#DDDDC1' },
         })}
       >
         <Tab.Screen name="Grocery List" component={GroceryListComponent} options={{ headerShown: false }} />
@@ -50,7 +54,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#e67a7a',
     alignItems: 'center',
     justifyContent: 'center',
   },

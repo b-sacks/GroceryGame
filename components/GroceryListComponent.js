@@ -126,7 +126,7 @@ const GroceryListComponent = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView keyboardShouldPersistTaps='always'>
+      <ScrollView keyboardShouldPersistTaps='always' backgroundColor='#F0F0E3'>
         <View style={{paddingTop: 15}}>
           {items.map((item, index) => (
             <ItemComponent
@@ -179,6 +179,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0.5 },
     shadowOpacity: 0.05,
     shadowRadius: 5,
+    backgroundColor: '#DDDDC1',
     },
   title: {
     position: 'absolute', // Make sure text is centered absolutely
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 35, // Set your desired font size here
     fontWeight: 'bold',
-    color: 'blue',
+    color: '#2F52E0',
   },
   clearAllButton: {
     position: 'absolute',
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
   clearAllButtonText: {
     fontSize: 13, // Set your desired font size here
     fontWeight: 'bold',
-    color: 'red',
+    color: 'tomato',
   },
   clearCheckedButton: {
     position: 'absolute',
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
   clearCheckedButtonText: {
     fontSize: 13, // Set your desired font size here
     fontWeight: 'bold',
-    color: 'blue',
+    color: '#2F52E0',
   },
   
 });

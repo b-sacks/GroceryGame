@@ -68,11 +68,12 @@ const styles = StyleSheet.create({
     // paddingVertical: 6,
     height: 44.5,
     alignItems: 'center',
-    borderWidth: 0.2,
-    borderColor: 'gray',
+    // borderWidth: 0.2,
+    // borderColor: 'gray',
   },
   name :{
     fontSize: 17,
+    color: '#0A0903'
   }
 });
 
