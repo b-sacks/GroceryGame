@@ -11,13 +11,33 @@ import 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // const GroceryListNavigator = require('./navigation/GroceryListNavigator');
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; // Import MaterialIcons
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Grocery List') {
+              iconName = focused ? 'check-circle' : 'check-circle'; // Example icon names
+            } else if (route.name === 'Master List') {
+              iconName = focused ? 'list' : 'list'; // Example icon names
+            } else if (route.name === 'Recipe List') {
+              iconName = focused ? 'book' : 'book'; // Example icon names
+            }
+
+            // You can return any component that you like here!
+            return <MaterialIcons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: 'tomato',
+          tabBarInactiveTintColor: 'gray',
+        })}
+      >
         <Tab.Screen name="Grocery List" component={GroceryListComponent} options={{ headerShown: false }} />
         <Tab.Screen name="Master List" component={MasterListComponent} options={{ headerShown: false }} />
         <Tab.Screen name="Recipe List" component={RecipeListComponent} options={{ headerShown: false }} />
