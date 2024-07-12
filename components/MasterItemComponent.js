@@ -62,28 +62,4 @@ const MasterItemComponent = ({ item, onDelete, onUpdate, onAddToGroceryList }) =
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 15,
-    // paddingVertical: 6,
-    height: 44.5,
-    alignItems: 'center',
-    borderWidth: 0.2,
-    borderColor: 'gray',
-  },
-  nameButtonText: {
-    fontSize: 17,
-  },
-  addToListButton: {
-    
-  },
-  addToListButtonText: {
-    fontSize: 17,
-    color: 'blue',
-    fontWeight: 'bold',
-  },
-});
-
 module.exports = MasterItemComponent;

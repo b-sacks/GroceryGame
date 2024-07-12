@@ -7,7 +7,7 @@ import Dialog from "react-native-dialog";
 import CheckBox from "@react-native-community/checkbox";
 const { groceryListItemStyles } = require('../styles/GroceryListStyles');
 
-const ItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
+const GroceryItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [inputText, setInputText] = useState('');
 
@@ -61,4 +61,4 @@ const ItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
   );
 };
 
-module.exports = ItemComponent;
+module.exports = GroceryItemComponent;

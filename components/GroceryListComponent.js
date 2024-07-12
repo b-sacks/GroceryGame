@@ -2,7 +2,7 @@
 const React = require('react');
 const { useState, useEffect } = React;
 const { View, Button, TextInput, Text, ScrollView, StyleSheet, TouchableOpacity } = require('react-native');
-const ItemComponent = require('./ItemComponent');
+const GroceryItemComponent = require('./GroceryItemComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
 import { useFocusEffect } from '@react-navigation/native';
@@ -130,7 +130,7 @@ const GroceryListComponent = () => {
       <ScrollView keyboardShouldPersistTaps='always' backgroundColor='#F0F0E3'>
         <View style={{paddingTop: 15}}>
           {items.map((item, index) => (
-            <ItemComponent
+            <GroceryItemComponent
               key={`${index}-${items.length}`}
               item={item}
               onDelete={() => deleteItem(index)}

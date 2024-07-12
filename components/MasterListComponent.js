@@ -2,7 +2,6 @@
 const React = require('react');
 const { useState, useEffect } = React;
 const { View, Button, TextInput, Text, ScrollView, StyleSheet, TouchableOpacity } = require('react-native');
-const ItemComponent = require('./ItemComponent');
 const MasterItemComponent = require('./MasterItemComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
