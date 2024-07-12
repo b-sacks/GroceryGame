@@ -54,7 +54,7 @@ const RecipeListComponent = () => {
         </View>
       </View>
       <ScrollView keyboardShouldPersistTaps='always' backgroundColor='#F0F0E3'>
-        <View style={{paddingTop: 20}}>
+        <View>
           {recipes.map((groceryList, index) => (
             <RecipeComponent
               key={`${index}-${recipes.length}`}

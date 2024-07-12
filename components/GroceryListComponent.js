@@ -128,7 +128,7 @@ const GroceryListComponent = () => {
         </View>
       </View>
       <ScrollView keyboardShouldPersistTaps='always' backgroundColor='#F0F0E3'>
-        <View style={{paddingTop: 15}}>
+        <View style={groceryListStyles.listMap}>
           {items.map((item, index) => (
             <GroceryItemComponent
               key={`${index}-${items.length}`}

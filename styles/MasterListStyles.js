@@ -21,6 +21,9 @@ const masterListStyles = StyleSheet.create({
   clearAllButtonText: {
     ...masterStyles.clearAllButtonText,
   },
+  listMap: {
+    ...masterStyles.listMap,
+  },
 });
 
 const masterListItemStyles = StyleSheet.create({
@@ -31,10 +34,9 @@ const masterListItemStyles = StyleSheet.create({
     ...masterStyles.itemName,
   },
   addToListButton: {
-    
   },
   addToListButtonText: {
-    fontSize: 17,
+    fontSize: 13,
     color: '#2F52E0',
     fontWeight: 'bold',
   },

@@ -3,11 +3,12 @@
 // components/GroceryListComponent.js
 const React = require('react');
 const { useState, useEffect } = React;
-const { View, Button, TextInput, Text, ScrollView } = require('react-native');
+const { View, Button, TextInput, Text, ScrollView, TouchableOpacity } = require('react-native');
 const RecipeItemComponent = require('./RecipeItemComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
 import { useFocusEffect } from '@react-navigation/native';
+const { recipeStyles } = require('../styles/RecipeListStyles');
 
 const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
   const [newItemName, setNewItemName] = useState('');
@@ -119,10 +120,29 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
   }
 
   return (
-    <ScrollView keyboardShouldPersistTaps='always'>
-      <Text style={{fontSize: 20, textAlign: 'center'}}>{recipeName}</Text>
+    <View keyboardShouldPersistTaps='always' style={recipeStyles.recipeContainer}>
+      <View style={recipeStyles.header}>
+        <View style={recipeStyles.deleteRecipeButton}>
+          <TouchableOpacity style={recipeStyles.deleteRecipeButton} onPress={() => setDeleteRecipeDialogVisible(true)}>
+            <Text style={recipeStyles.deleteRecipeButtonText}>Delete Recipe</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={recipeStyles.addToListButton}>
+          <TouchableOpacity style={recipeStyles.addToListButton} onPress={addToGroceryList} disabled={isRecipeInGroceryList}>
+            <Text style={[recipeStyles.addToListButtonText, isRecipeInGroceryList && recipeStyles.addToListButtonDisabled]}>
+              {isRecipeInGroceryList ? "Already In Grocery List": "Add To Grocery List"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={recipeStyles.recipeName}>{recipeName}</Text>
+        <View style={recipeStyles.addButton}>
+          <TouchableOpacity style={recipeStyles.addButton} onPress={() => setDialogVisible(true)}>
+            <Text style={recipeStyles.addButtonText}>+</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
 
-      <View style={{paddingTop: 20}}>
+      <View style={recipeStyles.listMap}>
         {items.map((item, index) => (
           <RecipeItemComponent
             key={`${index}-${items.length}`}
@@ -131,7 +151,7 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
             onUpdate={(name) => updateItem(index, name)}
           />
         ))}
-        <Button title="Add Item" onPress={() => setDialogVisible(true)} />
+        {/* <Button title="Add Item" onPress={() => setDialogVisible(true)} /> */}
 
         <Dialog.Container visible={isDialogVisible}>
           <Dialog.Title>Add Item</Dialog.Title>
@@ -157,16 +177,16 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
           <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
         </Dialog.Container>
 
-        <Button
+        {/* <Button
           title={isRecipeInGroceryList ? "Recipe Already In Grocery List": "Add Recipe To Grocery List"}
           onPress={addToGroceryList}
           disabled={isRecipeInGroceryList}
-        />
-        <Button title="Delete All Items From Recipe" onPress={() => setDeleteAllDialogVisible(true)} color="red" />
-        <Button title="Delete Recipe" onPress={() => setDeleteRecipeDialogVisible(true)} color="red" />
+        /> */}
+        {/* <Button title="Delete All Items From Recipe" onPress={() => setDeleteAllDialogVisible(true)} color="red" /> */}
+        {/* <Button title="Delete Recipe" onPress={() => setDeleteRecipeDialogVisible(true)} color="red" /> */}
         {/* <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text> */}
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

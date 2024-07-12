@@ -5,7 +5,6 @@ const masterStyles = StyleSheet.create({
     height: 110,
     justifyContent: 'center', // Center vertically
     alignItems: 'center', // Center horizontally
-    backgroundColor: 'white',
     borderWidth: 0.1,
     borderColor: 'gray',
     shadowColor: 'black',
@@ -44,7 +43,6 @@ const masterStyles = StyleSheet.create({
   clearCheckedButton: {
     position: 'absolute',
     left: 8,
-    marginTop: 31,
   },
   clearCheckedButtonText: {
     fontSize: 13, // Set your desired font size here
@@ -58,8 +56,16 @@ const masterStyles = StyleSheet.create({
     // paddingVertical: 6,
     height: 44.5,
     alignItems: 'center',
-    // borderWidth: 0.2,
-    // borderColor: 'gray',
+    borderBottomWidth: 0.2,
+    borderColor: 'gray',
+    borderBottomStartRadius: 15,
+    borderBottomEndRadius: 15,
+    // borderTopWidth: 0.2,
+    // borderTopStartRadius: 15,
+    // borderTopEndRadius: 15,
+  },
+  listMap: {
+    paddingTop: 10,
   },
   itemName :{
     fontSize: 17,

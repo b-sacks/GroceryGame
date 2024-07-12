@@ -105,7 +105,7 @@ const MasterListComponent = () => {
         </View>
       </View>
       <ScrollView keyboardShouldPersistTaps='always' backgroundColor='#F0F0E3'>
-        <View style={{paddingTop: 15}}>
+        <View style={masterListStyles.listMap}>
           {items.map((item, index) => (
             <MasterItemComponent
               key={`${index}-${items.length}`}

@@ -27,6 +27,9 @@ const groceryListStyles = StyleSheet.create({
   clearCheckedButtonText: {
     ...masterStyles.clearCheckedButtonText,
   },
+  listMap: {
+    ...masterStyles.listMap,
+  },
 });
 
 const groceryListItemStyles = StyleSheet.create({
