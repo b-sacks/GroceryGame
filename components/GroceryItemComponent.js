@@ -57,6 +57,7 @@ const GroceryItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) 
           </Dialog.Container>
         </View>
       </Swipeable>
+      <View style={groceryListItemStyles.itemBorder} />
     </GestureHandlerRootView>
   );
 };

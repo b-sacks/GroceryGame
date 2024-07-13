@@ -39,6 +39,9 @@ const groceryListItemStyles = StyleSheet.create({
   itemName: {
     ...masterStyles.itemName,
   },
+  itemBorder: {
+    ...masterStyles.itemBorder,
+  },
 });
 
 module.exports = { groceryListStyles, groceryListItemStyles };

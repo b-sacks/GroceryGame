@@ -54,6 +54,7 @@ const RecipeComponent = ({ item, onDelete, onUpdate }) => {
           </Dialog.Container>
         </View>
       </Swipeable>
+      <View style={recipeListItemStyles.itemBorder} />
     </GestureHandlerRootView>
   );
 };

@@ -78,6 +78,9 @@ const recipeListItemStyles = StyleSheet.create({
   itemName: {
     ...masterStyles.itemName,
   },
+  itemBorder: {
+    ...masterStyles.itemBorder,
+  },
 });
 
 module.exports = { recipeListStyles, recipeStyles, recipeListItemStyles };

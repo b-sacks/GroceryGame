@@ -56,13 +56,9 @@ const masterStyles = StyleSheet.create({
     // paddingVertical: 6,
     height: 44.5,
     alignItems: 'center',
-    borderBottomWidth: 0.2,
-    borderColor: 'gray',
-    borderBottomStartRadius: 15,
-    borderBottomEndRadius: 15,
-    // borderTopWidth: 0.2,
-    // borderTopStartRadius: 15,
-    // borderTopEndRadius: 15,
+    // borderBottomWidth: 0.2,
+    // borderColor: 'gray',
+    // marginHorizontal: 13,
   },
   listMap: {
     paddingTop: 10,
@@ -71,6 +67,11 @@ const masterStyles = StyleSheet.create({
     fontSize: 17,
     color: '#0A0903'
   },
+  itemBorder :{
+    borderBottomWidth: 0.34,
+    borderColor: 'gray',
+    marginHorizontal: 13,
+  }
 });
 
 module.exports = masterStyles;

@@ -40,6 +40,9 @@ const masterListItemStyles = StyleSheet.create({
     color: '#2F52E0',
     fontWeight: 'bold',
   },
+  itemBorder: {
+    ...masterStyles.itemBorder,
+  },
 });
 
 module.exports = { masterListStyles, masterListItemStyles };

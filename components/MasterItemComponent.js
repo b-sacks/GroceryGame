@@ -58,6 +58,7 @@ const MasterItemComponent = ({ item, onDelete, onUpdate, onAddToGroceryList }) =
           </Dialog.Container>
         </View>
     </Swipeable>
+    <View style={masterListItemStyles.itemBorder} />
   </GestureHandlerRootView>
   );
 };
