@@ -6,8 +6,10 @@ const { View, Text, TextInput, Button, TouchableOpacity, StyleSheet, Animated } 
 import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Dialog from "react-native-dialog";
 const { recipeListItemStyles } = require('../styles/RecipeListStyles');
+import CheckBox from "@react-native-community/checkbox";
+const GroceryList = require('../services/GroceryList');
 
-const RecipeComponent = ({ item, onDelete, onUpdate }) => {
+const RecipeComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [inputText, setInputText] = useState('');
 
@@ -42,6 +44,10 @@ const RecipeComponent = ({ item, onDelete, onUpdate }) => {
           <TouchableOpacity onPress={handleEdit}>
             <Text style={recipeListItemStyles.itemName}>{item}</Text>
           </TouchableOpacity>
+          <CheckBox
+            value={isChecked}
+            onValueChange={onCheck}
+          />
           {/* <Text style={{paddingTop: 11}}>{item}</Text> */}
           {/* <Button title="Edit" onPress={handleEdit} /> */}
           {/* <Button title="Delete" onPress={onDelete} /> */}

@@ -16,6 +16,7 @@ const RecipeListComponent = () => {
   const [newRecipeName, setNewRecipeName] = useState('');
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [recipes, setRecipes] = useState([]);
+  const [isItemExistsDialogVisible, setItemExistsDialogVisible] = useState(false);
 
   const fetchRecipes = async () => {
     const fetchedRecipes = await getRecipes();
@@ -33,8 +34,13 @@ const RecipeListComponent = () => {
   }, []);
 
   const addRecipe = async () => {
-    if (!newRecipeName.trim()) {
-      // Optionally handle validation or feedback here
+    setDialogVisible(false);
+    if (!newRecipeName.trim() || isInList(newRecipeName) || 
+    newRecipeName === 'masterList' || newRecipeName === 'checked' || newRecipeName === 'groceryList') {
+      setTimeout(() => {
+        setItemExistsDialogVisible(true);
+        console.log('recipe exists');
+      }, 400);
       return;
     }
     const newList = new GroceryList(newRecipeName);
@@ -42,6 +48,13 @@ const RecipeListComponent = () => {
     setNewRecipeName('');
     setDialogVisible(false);
   };
+
+  const isInList = (name) => {
+    // not case sensitive or whitespace sensitive
+    name = name.trim().toLowerCase();
+    const recipeNames = recipes.map(i => i.key);
+    return recipeNames.map(i => i.trim().toLowerCase()).includes(name);
+  }
 
   return (
     <View style={{flex: 1}}>
@@ -77,6 +90,11 @@ const RecipeListComponent = () => {
             />
             <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
             <Dialog.Button label="Add" onPress={addRecipe} />
+          </Dialog.Container>
+            <Dialog.Container visible={isItemExistsDialogVisible}>
+            <Dialog.Title>Recipe Exists</Dialog.Title>
+            <Dialog.Description>Recipe already in the list. Please pick a different name.</Dialog.Description>
+            <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
           </Dialog.Container>
         </View>
       </ScrollView>

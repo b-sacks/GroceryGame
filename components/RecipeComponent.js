@@ -15,22 +15,29 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
   const [groceryList, setGroceryList] = useState(new GroceryList(recipeName));
   const [items, setItems] = useState([]);
   const [isRecipeInGroceryList, setIsRecipeInGroceryList] = useState(false);
+  const [checked, setChecked] = useState(false);
   
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [isItemExistsDialogVisible, setItemExistsDialogVisible] = useState(false);
   const [isDeleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
   const [isDeleteRecipeDialogVisible, setDeleteRecipeDialogVisible] = useState(false);
 
+  const [gItems, setGItems] = useState([]);
+
   const fetchItems = async () => {
     const fetchedItems = await groceryList.getItems();
     setItems(fetchedItems);
+
+    const gList = new GroceryList('groceryList');
+    const fetchedGItems = await gList.getItems();
+    setGItems(fetchedGItems);
   };
 
   useFocusEffect(
     React.useCallback(() => {
       fetchItems();
       isInGroceryList();
-    }, [groceryList, isRecipeInGroceryList])
+    }, [groceryList, isRecipeInGroceryList, checked])
   );
 
   // useEffect(() => {
@@ -110,6 +117,7 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
     const groceryList = new GroceryList('groceryList');
     const groceryListItems = await groceryList.getItems();
     for (const item of items) {
+      //validfation here
       if (!groceryListItems.includes(item)) {
         setIsRecipeInGroceryList(false);
         return;
@@ -117,6 +125,22 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
     }
     setIsRecipeInGroceryList(true);
     return;
+  }
+  const handleCheck = async (item, isChecked) => {
+    const newGroceryList = new GroceryList('groceryList');
+    if (isChecked) {
+      await newGroceryList.addItem(item);
+    } else {
+      const groceryListItems = await newGroceryList.getItems();
+      await newGroceryList.deleteItem(groceryListItems.indexOf(item));
+    }
+    console.log('handle check')
+    setChecked(!checked);
+  };
+
+  const isItemGroceryList = (name) => {
+    name = name.trim().toLowerCase();
+    return gItems.map(i => i.trim().toLowerCase()).includes(name);
   }
 
   return (
@@ -149,6 +173,8 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
             item={item}
             onDelete={() => deleteItem(index)}
             onUpdate={(name) => updateItem(index, name)}
+            onCheck={(isChecked) => handleCheck(item, isChecked)}
+            isChecked={isItemGroceryList(item)}
           />
         ))}
         {/* <Button title="Add Item" onPress={() => setDialogVisible(true)} /> */}

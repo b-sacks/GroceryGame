@@ -22,7 +22,6 @@ const recipeStyles = StyleSheet.create({
     justifyContent: 'center', // Center vertically
     alignItems: 'center', // Center horizontally
     // backgroundColor: '#DDDDC1',
-    // borderTopWidth: 0.2,
     borderBottomWidth: 0.2,
     borderColor: 'gray',
     borderBottomStartRadius: 15,

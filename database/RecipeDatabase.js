@@ -10,6 +10,7 @@ const getRecipes = async () => {
     }
     keys.splice(keys.indexOf('groceryList'), 1);
     keys.splice(keys.indexOf('masterList'), 1);
+    keys.splice(keys.indexOf('checked'), 1);
     const recipes = [];
     for (let i = 0; i < keys.length; i++) {
       const recipe = await getGroceryList(keys[i]);

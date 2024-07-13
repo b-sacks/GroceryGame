@@ -11,6 +11,7 @@ const { groceryListStyles } = require('../styles/GroceryListStyles');
 const GroceryListComponent = () => {
   const [newItemName, setNewItemName] = useState('');
   const [groceryList, setGroceryList] = useState(new GroceryList('groceryList'));
+  const [checkedGroceryList, setCheckedGroceryList] = useState(new GroceryList('checked'));
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [isItemExistsDialogVisible, setItemExistsDialogVisible] = useState(false);
   const [isDeleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
@@ -20,14 +21,21 @@ const GroceryListComponent = () => {
   const fetchItems = async () => {
     const fetchedItems = await groceryList.getItems();
     setItems(fetchedItems);
+
+    const fetchedCheckedItems = await checkedGroceryList.getItems();
+    setCheckedItems(fetchedCheckedItems);
   };
 
-  const handleCheck = (item, isChecked) => {
+  const handleCheck = async (item, isChecked) => {
+    const newCheckedGroceryList = new GroceryList('checked');
     if (isChecked) {
       setCheckedItems([...checkedItems, item]);
+      await newCheckedGroceryList.addItem(item);
     } else {
       setCheckedItems(checkedItems.filter(i => i !== item));
+      await newCheckedGroceryList.deleteItem(checkedItems.indexOf(item));
     }
+    setCheckedGroceryList(newCheckedGroceryList);
   };
 
   useFocusEffect(
@@ -58,6 +66,12 @@ const GroceryListComponent = () => {
     const newList = new GroceryList('groceryList');
     await newList.deleteItem(index);
     setGroceryList(newList);
+
+    const itemName = items[index];
+    setCheckedItems(checkedItems.filter((i) => i !== itemName));
+    const newCheckedGroceryList = new GroceryList('checked');
+    await newCheckedGroceryList.deleteItem(checkedItems.indexOf(itemName));
+    setCheckedGroceryList(newCheckedGroceryList);
   };
 
   const updateItem = async (index, name) => {
@@ -81,10 +95,13 @@ const GroceryListComponent = () => {
     const newList = new GroceryList('groceryList');
     await newList.deleteAllItems();
     setGroceryList(newList);
+    await uncheckAllItems();
   }
 
-  const uncheckItems = () => {
+  const uncheckAllItems = async () => {
     setCheckedItems([]);
+    await checkedGroceryList.deleteAllItems();
+    setCheckedGroceryList(new GroceryList('checked'));
   };
 
   // const checkAllItems = () => {
@@ -98,11 +115,10 @@ const GroceryListComponent = () => {
       await newList.deleteItem(index);
     }
     setGroceryList(newList);
-    uncheckItems();
+    await uncheckAllItems();
   }
 
   const isInList = (name) => {
-    // not case sensitive or whitespace sensitive
     name = name.trim().toLowerCase();
     return items.map(i => i.trim().toLowerCase()).includes(name);
   }
@@ -139,7 +155,7 @@ const GroceryListComponent = () => {
               isChecked={checkedItems.includes(item)}
             />
           ))}
-          {/* <Button title="Uncheck All Items" onPress={uncheckItems} /> */}
+          {/* <Button title="Uncheck All Items" onPress={uncheckAllItems} /> */}
           {/* <Button title="Check All Items" onPress={checkAllItems} /> */}
           {/* <Button title="Clear Checked Items" onPress={clearCheckedItems} /> */}
           
