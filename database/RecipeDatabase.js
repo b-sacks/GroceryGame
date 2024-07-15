@@ -8,13 +8,11 @@ const getRecipes = async () => {
     if (keys === null) {
       return [];
     }
-    keys.splice(keys.indexOf('groceryList'), 1);
-    keys.splice(keys.indexOf('masterList'), 1);
-    keys.splice(keys.indexOf('checked'), 1);
+    const filteredKeys = keys.filter(key => key !== 'groceryList' && key !== 'masterList' && key !== 'checked');
     const recipes = [];
-    for (let i = 0; i < keys.length; i++) {
-      const recipe = await getGroceryList(keys[i]);
-      const groceryList = new GroceryList(keys[i]);
+    for (let i = 0; i < filteredKeys.length; i++) {
+      const recipe = await getGroceryList(filteredKeys[i]);
+      const groceryList = new GroceryList(filteredKeys[i]);
       await groceryList.deleteAllItems();
       for (let j = 0; j < recipe.length; j++) {
         await groceryList.addItem(recipe[j]);

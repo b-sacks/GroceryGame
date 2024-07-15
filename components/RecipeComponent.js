@@ -134,7 +134,6 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
       const groceryListItems = await newGroceryList.getItems();
       await newGroceryList.deleteItem(groceryListItems.indexOf(item));
     }
-    console.log('handle check')
     setChecked(!checked);
   };
 

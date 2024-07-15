@@ -21,7 +21,6 @@ const MasterItemComponent = ({ item, onDelete, onUpdate, onAddToGroceryList }) =
   // }, [isItemInGroceryList]);
   const fetchItems = async () => {
     isInGroceryList();
-    console.log(item, 'fetch called')
   };
 
   useFocusEffect(
@@ -58,7 +57,6 @@ const MasterItemComponent = ({ item, onDelete, onUpdate, onAddToGroceryList }) =
     const groceryList = new GroceryList('groceryList');
     const items = await groceryList.getItems();
     setItemInGroceryList(items.includes(item));
-    console.log(isItemInGroceryList);
     return items.includes(item);
   }
 

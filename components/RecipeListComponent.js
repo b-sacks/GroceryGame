@@ -23,12 +23,6 @@ const RecipeListComponent = () => {
     setRecipes(fetchedRecipes);
   };
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     fetchRecipes();
-  //   }, [])
-  // );
-
   useEffect(() => {
     fetchRecipes();
   }, []);
@@ -39,7 +33,6 @@ const RecipeListComponent = () => {
     newRecipeName === 'masterList' || newRecipeName === 'checked' || newRecipeName === 'groceryList') {
       setTimeout(() => {
         setItemExistsDialogVisible(true);
-        console.log('recipe exists');
       }, 400);
       return;
     }
