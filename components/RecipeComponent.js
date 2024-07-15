@@ -116,9 +116,9 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
     await fetchItems();
     const groceryList = new GroceryList('groceryList');
     const groceryListItems = await groceryList.getItems();
-    for (const item of items) {
-      //validfation here
-      if (!groceryListItems.includes(item)) {
+    for (let item of items) {
+      item = item.trim().toLowerCase();
+      if (!groceryListItems.map(i => i.trim().toLowerCase()).includes(item)) {
         setIsRecipeInGroceryList(false);
         return;
       }
@@ -129,7 +129,12 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
   const handleCheck = async (item, isChecked) => {
     const newGroceryList = new GroceryList('groceryList');
     if (isChecked) {
-      await newGroceryList.addItem(item);
+      item = item.trim().toLowerCase();
+      const groceryList = new GroceryList('groceryList');
+      const groceryListItems = await groceryList.getItems();
+      if (!groceryListItems.map(i => i.trim().toLowerCase()).includes(item)) {
+        await newGroceryList.addItem(item);
+      }
     } else {
       const groceryListItems = await newGroceryList.getItems();
       await newGroceryList.deleteItem(groceryListItems.indexOf(item));
