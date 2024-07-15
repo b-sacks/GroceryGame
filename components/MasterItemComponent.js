@@ -1,14 +1,34 @@
 // components/ItemComponent.js
 const React = require('react');
-const { useState, useRef } = React;
+const { useState, useEffect } = React;
 const { View, Text, TextInput, Button, TouchableOpacity, StyleSheet, Animated } = require('react-native');
 import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Dialog from "react-native-dialog";
 const { masterListItemStyles } = require('../styles/MasterListStyles');
+const GroceryList = require('../services/GroceryList');
+import { useFocusEffect } from '@react-navigation/native';
 
 const MasterItemComponent = ({ item, onDelete, onUpdate, onAddToGroceryList }) => {
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [inputText, setInputText] = useState('');
+  const [isItemInGroceryList, setItemInGroceryList] = useState(false);
+
+  // useEffect(() => {
+  //   const fetchItems = async () => {
+  //     isInGroceryList();
+  //   };
+  //   fetchItems();
+  // }, [isItemInGroceryList]);
+  const fetchItems = async () => {
+    isInGroceryList();
+    console.log(item, 'fetch called')
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchItems();
+    }, [isItemInGroceryList])
+  );
 
   const handleEdit = () => {
     setDialogVisible(true);
@@ -34,6 +54,14 @@ const MasterItemComponent = ({ item, onDelete, onUpdate, onAddToGroceryList }) =
     );
   };
 
+  const isInGroceryList = async () => {
+    const groceryList = new GroceryList('groceryList');
+    const items = await groceryList.getItems();
+    setItemInGroceryList(items.includes(item));
+    console.log(isItemInGroceryList);
+    return items.includes(item);
+  }
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Swipeable renderRightActions={renderSwipe} onSwipeableOpen={onDelete}>
@@ -42,9 +70,16 @@ const MasterItemComponent = ({ item, onDelete, onUpdate, onAddToGroceryList }) =
             <Text style={masterListItemStyles.itemName}>{item}</Text>
           </TouchableOpacity>
           {/* <Button title="Edit" onPress={handleEdit} /> */}
-          <View style={masterListItemStyles.addToListButton}>
+          {/* <View style={masterListItemStyles.addToListButton}>
             <TouchableOpacity style={masterListItemStyles.addToListButton} onPress={onAddToGroceryList}>
               <Text style={masterListItemStyles.addToListButtonText}>Add to Grocery List</Text>
+            </TouchableOpacity>
+          </View> */}
+          <View style={masterListItemStyles.addToListButton}>
+            <TouchableOpacity style={masterListItemStyles.addToListButton} onPress={onAddToGroceryList} disabled={isItemInGroceryList}>
+              <Text style={[masterListItemStyles.addToListButtonText, isItemInGroceryList && masterListItemStyles.addToListButtonDisabled]}>
+                {isItemInGroceryList ? "Already In Grocery List": "Add To Grocery List"}
+              </Text>
             </TouchableOpacity>
           </View>
           {/* <Button title="Add to Grocery List" onPress={onAddToGroceryList} /> */}

@@ -70,7 +70,8 @@ const GroceryListComponent = () => {
     const itemName = items[index];
     setCheckedItems(checkedItems.filter((i) => i !== itemName));
     const newCheckedGroceryList = new GroceryList('checked');
-    await newCheckedGroceryList.deleteItem(checkedItems.indexOf(itemName));
+    const i = checkedItems.indexOf(itemName);
+    await newCheckedGroceryList.deleteItem(i);
     setCheckedGroceryList(newCheckedGroceryList);
   };
 

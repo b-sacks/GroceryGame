@@ -43,6 +43,9 @@ const masterListItemStyles = StyleSheet.create({
   itemBorder: {
     ...masterStyles.itemBorder,
   },
+  addToListButtonDisabled : {
+    color: 'gray',
+  },
 });
 
 module.exports = { masterListStyles, masterListItemStyles };

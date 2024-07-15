@@ -15,15 +15,16 @@ const MasterListComponent = () => {
   const [itemExistsDialogMessage, setItemExistsDialogMessage] = useState('');
   const [isDeleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
   const [items, setItems] = useState([]);
+  const [refresh, setRefresh] = useState(0);
+
+  const fetchItems = async () => {
+    const fetchedItems = await groceryList.getItems();
+    setItems(fetchedItems);
+  };
 
   useEffect(() => {
-    const fetchItems = async () => {
-      const fetchedItems = await groceryList.getItems();
-      setItems(fetchedItems);
-    };
-
     fetchItems();
-  }, [groceryList]);
+  }, [groceryList, refresh]);
 
   const addItem = async () => {
     setDialogVisible(false);
@@ -81,6 +82,7 @@ const MasterListComponent = () => {
       return;
     }
     await groceryList.addItem(item);
+    setRefresh(!refresh);
   }
 
   const isInList = (name) => {
@@ -108,7 +110,7 @@ const MasterListComponent = () => {
         <View style={masterListStyles.listMap}>
           {items.map((item, index) => (
             <MasterItemComponent
-              key={`${index}-${items.length}`}
+              key={`${index}-${items.length}+${refresh}`}
               item={item}
               onDelete={() => deleteItem(index)}
               onUpdate={(name) => updateItem(index, name)}
