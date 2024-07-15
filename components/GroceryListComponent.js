@@ -1,12 +1,13 @@
 // components/GroceryListComponent.js
 const React = require('react');
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef } = React;
 const { View, Button, TextInput, Text, ScrollView, StyleSheet, TouchableOpacity } = require('react-native');
 const GroceryItemComponent = require('./GroceryItemComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
 import { useFocusEffect } from '@react-navigation/native';
 const { groceryListStyles } = require('../styles/GroceryListStyles');
+import LottieView from 'lottie-react-native';
 
 const GroceryListComponent = () => {
   const [newItemName, setNewItemName] = useState('');
@@ -17,6 +18,7 @@ const GroceryListComponent = () => {
   const [isDeleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
   const [items, setItems] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
+  const [chosenConfettiFile, setChosenConfettiFile] = useState('');
 
   const fetchItems = async () => {
     const fetchedItems = await groceryList.getItems();
@@ -36,6 +38,12 @@ const GroceryListComponent = () => {
       await newCheckedGroceryList.deleteItem(checkedItems.indexOf(item));
     }
     setCheckedGroceryList(newCheckedGroceryList);
+    const newerCheckedGroceryList = new GroceryList('checked');
+    const newerCheckedItems = await newerCheckedGroceryList.getItems(item);
+    if (items.length === newerCheckedItems.length) {
+      setChosenConfettiFile(confettiFiles[Math.floor(Math.random() * confettiFiles.length)]);
+      triggerConfetti();
+    }
   };
 
   useFocusEffect(
@@ -68,7 +76,7 @@ const GroceryListComponent = () => {
     setGroceryList(newList);
 
     const itemName = items[index];
-    setCheckedItems(checkedItems.filter((i) => i !== itemName));
+    setCheckedItems(checkedItems.filter(i => i !== itemName));
     const newCheckedGroceryList = new GroceryList('checked');
     const i = checkedItems.indexOf(itemName);
     await newCheckedGroceryList.deleteItem(i);
@@ -123,6 +131,17 @@ const GroceryListComponent = () => {
     name = name.trim().toLowerCase();
     return items.map(i => i.trim().toLowerCase()).includes(name);
   }
+
+  const confettiRef = useRef(null);
+  const confettiFiles = [
+    require('../assets/confetti1.json'),
+    require('../assets/confetti2.json'),
+    require('../assets/confetti3.json')
+  ];
+
+  const triggerConfetti = () => {
+    confettiRef.current?.play(0);
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -181,6 +200,14 @@ const GroceryListComponent = () => {
         <Dialog.Description>Item already in the list. Please pick a different name.</Dialog.Description>
         <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
       </Dialog.Container>
+      <LottieView
+        ref={confettiRef}
+        source={chosenConfettiFile}
+        autoPlay={false}
+        loop={false}
+        style={groceryListStyles.lottie}
+        resizeMode='cover'
+      />
     </View>
   );
 };

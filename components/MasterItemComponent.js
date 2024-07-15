@@ -58,7 +58,7 @@ const MasterItemComponent = ({ item, onDelete, onUpdate, onAddToGroceryList }) =
     const items = await groceryList.getItems();
     const parsedItem = item.trim().toLowerCase();
     setItemInGroceryList(items.map(i => i.trim().toLowerCase()).includes(parsedItem));
-    return items.includes(item);
+    return isItemInGroceryList;
   }
 
   return (

@@ -30,6 +30,15 @@ const groceryListStyles = StyleSheet.create({
   listMap: {
     ...masterStyles.listMap,
   },
+  lottie: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 1000,
+    pointerEvents: 'none',
+  },
 });
 
 const groceryListItemStyles = StyleSheet.create({
