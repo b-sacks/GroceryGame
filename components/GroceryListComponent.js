@@ -26,6 +26,24 @@ const GroceryListComponent = () => {
 
     const fetchedCheckedItems = await checkedGroceryList.getItems();
     setCheckedItems(fetchedCheckedItems);
+    setCheckedGroceryList(new GroceryList('checked'));
+
+    for (const checkedItem of fetchedCheckedItems) {
+      // string validation
+      const parsedCheckedItem = checkedItem.trim().toLowerCase();
+      if (!fetchedItems.map(i => i.trim().toLowerCase()).includes(parsedCheckedItem)) {
+        // fetch new checked list for updating on time
+        const newCheckedGroceryList = new GroceryList('checked');
+        const newCheckedItems = await newCheckedGroceryList.getItems();
+        await newCheckedGroceryList.deleteItem(newCheckedItems.indexOf(checkedItem));
+        newCheckedItems.filter(i => i !== checkedItem);
+        setCheckedItems(newCheckedItems);
+        setCheckedGroceryList(new GroceryList('checked'));
+      }
+    }
+    //update checked list again
+    const updatedCheckedItems = await checkedGroceryList.getItems();
+    setCheckedItems(updatedCheckedItems);
   };
 
   const handleCheck = async (item, isChecked) => {
@@ -40,7 +58,7 @@ const GroceryListComponent = () => {
     setCheckedGroceryList(newCheckedGroceryList);
     const newerCheckedGroceryList = new GroceryList('checked');
     const newerCheckedItems = await newerCheckedGroceryList.getItems(item);
-    if (items.length === newerCheckedItems.length) {
+    if (items.length === newerCheckedItems.length && items.length !== 0) {
       setChosenConfettiFile(confettiFiles[Math.floor(Math.random() * confettiFiles.length)]);
       triggerConfetti();
     }
@@ -97,6 +115,7 @@ const GroceryListComponent = () => {
     const newList = new GroceryList('groceryList');
     await newList.updateItem(index, name);
     setGroceryList(newList);
+    fetchItems();
   };
 
   const deleteAllItems = async () => {
@@ -118,13 +137,14 @@ const GroceryListComponent = () => {
   // }
 
   const clearCheckedItems = async () => {
+    fetchItems();
     const newList = new GroceryList('groceryList');
     for (const item of checkedItems) {
       const index = items.indexOf(item);
       await newList.deleteItem(index);
     }
-    setGroceryList(newList);
     await uncheckAllItems();
+    setGroceryList(new GroceryList('groceryList'));
   }
 
   const isInList = (name) => {
