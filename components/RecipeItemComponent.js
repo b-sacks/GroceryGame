@@ -47,6 +47,11 @@ const RecipeComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
           <CheckBox
             value={isChecked}
             onValueChange={onCheck}
+            tintColor="#bfbfbf"
+            // onCheckColor="dodgerblue"
+            // onTintColor="dodgerblue"
+            onAnimationType="fill"
+            offAnimationType="bounce"
           />
           {/* <Text style={{paddingTop: 11}}>{item}</Text> */}
           {/* <Button title="Edit" onPress={handleEdit} /> */}

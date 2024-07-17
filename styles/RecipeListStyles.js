@@ -31,8 +31,8 @@ const recipeStyles = StyleSheet.create({
     ...masterStyles.title,
     fontSize: 20,
     textAlign: 'center',
-    fontWeight: 'regular',
-    paddingTop: 0,
+    fontWeight: '500',
+    paddingBottom: 60,
   },
   deleteRecipeButton:
   {
@@ -44,7 +44,7 @@ const recipeStyles = StyleSheet.create({
   },
   addToListButton: {
     ...masterStyles.clearCheckedButton,
-    marginTop: 10,
+    marginTop: 8,
   },
   addToListButtonDisabled : {
     color: 'gray',

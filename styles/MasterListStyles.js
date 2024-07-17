@@ -36,9 +36,10 @@ const masterListItemStyles = StyleSheet.create({
   addToListButton: {
   },
   addToListButtonText: {
-    fontSize: 13,
+    fontSize: 14.1,
     color: '#2F52E0',
     fontWeight: 'bold',
+    fontFamily: 'Avenir',
   },
   itemBorder: {
     ...masterStyles.itemBorder,

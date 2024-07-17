@@ -47,6 +47,11 @@ const GroceryItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) 
           <CheckBox
             value={isChecked}
             onValueChange={onCheck}
+            tintColor="#bfbfbf"
+            // onCheckColor="dodgerblue"
+            // onTintColor="dodgerblue"
+            onAnimationType="fill"
+            offAnimationType="bounce"
           />
 
           <Dialog.Container visible={isDialogVisible}>

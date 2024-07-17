@@ -40,6 +40,7 @@ export default function App() {
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'gray',
           tabBarStyle: { backgroundColor: '#DDDDC1' },
+          // tabBarLabelStyle: { fontFamily: 'Avenir', fontSize: 11 },
         })}
       >
         <Tab.Screen name="Grocery List" component={GroceryListComponent} options={{ headerShown: false }} />

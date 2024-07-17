@@ -129,10 +129,10 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
   const handleCheck = async (item, isChecked) => {
     const newGroceryList = new GroceryList('groceryList');
     if (isChecked) {
-      item = item.trim().toLowerCase();
+      parsedItem = item.trim().toLowerCase();
       const groceryList = new GroceryList('groceryList');
       const groceryListItems = await groceryList.getItems();
-      if (!groceryListItems.map(i => i.trim().toLowerCase()).includes(item)) {
+      if (!groceryListItems.map(i => i.trim().toLowerCase()).includes(parsedItem)) {
         await newGroceryList.addItem(item);
       }
     } else {

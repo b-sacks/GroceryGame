@@ -20,6 +20,7 @@ const masterStyles = StyleSheet.create({
     fontWeight: 'bold',
     paddingTop: 50,
     color: '#0A0903',
+    fontFamily: 'Avenir',
   },
   addButton: {
     position: 'absolute',
@@ -36,18 +37,20 @@ const masterStyles = StyleSheet.create({
     left: 8,
   },
   clearAllButtonText: {
-    fontSize: 13, // Set your desired font size here
+    fontSize: 13.5, // Set your desired font size here
     fontWeight: 'bold',
     color: 'tomato',
+    fontFamily: 'Avenir',
   },
   clearCheckedButton: {
     position: 'absolute',
     left: 8,
   },
   clearCheckedButtonText: {
-    fontSize: 13, // Set your desired font size here
+    fontSize: 13.5, // Set your desired font size here
     fontWeight: 'bold',
     color: '#2F52E0',
+    fontFamily: 'Avenir',
   },
   listContainer: {
     flexDirection: 'row',
@@ -64,8 +67,9 @@ const masterStyles = StyleSheet.create({
     paddingTop: 10,
   },
   itemName :{
-    fontSize: 17,
-    color: '#0A0903'
+    fontSize: 18,
+    color: '#0A0903',
+    fontFamily: 'Avenir',
   },
   itemBorder :{
     borderBottomWidth: 0.34,
