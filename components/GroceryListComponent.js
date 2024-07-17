@@ -1,31 +1,66 @@
 // components/GroceryListComponent.js
 const React = require('react');
-const { useState, useEffect } = React;
-const { View, Button, TextInput, Text, ScrollView } = require('react-native');
-const ItemComponent = require('./ItemComponent');
+const { useState, useEffect, useRef } = React;
+const { View, Button, TextInput, Text, ScrollView, StyleSheet, TouchableOpacity } = require('react-native');
+const GroceryItemComponent = require('./GroceryItemComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
 import { useFocusEffect } from '@react-navigation/native';
+const { groceryListStyles } = require('../styles/GroceryListStyles');
+import LottieView from 'lottie-react-native';
 
 const GroceryListComponent = () => {
   const [newItemName, setNewItemName] = useState('');
   const [groceryList, setGroceryList] = useState(new GroceryList('groceryList'));
+  const [checkedGroceryList, setCheckedGroceryList] = useState(new GroceryList('checked'));
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [isItemExistsDialogVisible, setItemExistsDialogVisible] = useState(false);
   const [isDeleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
   const [items, setItems] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
+  const [chosenConfettiFile, setChosenConfettiFile] = useState('');
 
   const fetchItems = async () => {
     const fetchedItems = await groceryList.getItems();
     setItems(fetchedItems);
+
+    const fetchedCheckedItems = await checkedGroceryList.getItems();
+    setCheckedItems(fetchedCheckedItems);
+    setCheckedGroceryList(new GroceryList('checked'));
+
+    for (const checkedItem of fetchedCheckedItems) {
+      // string validation
+      const parsedCheckedItem = checkedItem.trim().toLowerCase();
+      if (!fetchedItems.map(i => i.trim().toLowerCase()).includes(parsedCheckedItem)) {
+        // fetch new checked list for updating on time
+        const newCheckedGroceryList = new GroceryList('checked');
+        const newCheckedItems = await newCheckedGroceryList.getItems();
+        await newCheckedGroceryList.deleteItem(newCheckedItems.indexOf(checkedItem));
+        newCheckedItems.filter(i => i !== checkedItem);
+        setCheckedItems(newCheckedItems);
+        setCheckedGroceryList(new GroceryList('checked'));
+      }
+    }
+    //update checked list again
+    const updatedCheckedItems = await checkedGroceryList.getItems();
+    setCheckedItems(updatedCheckedItems);
   };
 
-  const handleCheck = (item, isChecked) => {
+  const handleCheck = async (item, isChecked) => {
+    const newCheckedGroceryList = new GroceryList('checked');
     if (isChecked) {
       setCheckedItems([...checkedItems, item]);
+      await newCheckedGroceryList.addItem(item);
     } else {
       setCheckedItems(checkedItems.filter(i => i !== item));
+      await newCheckedGroceryList.deleteItem(checkedItems.indexOf(item));
+    }
+    setCheckedGroceryList(newCheckedGroceryList);
+    const newerCheckedGroceryList = new GroceryList('checked');
+    const newerCheckedItems = await newerCheckedGroceryList.getItems(item);
+    if (items.length === newerCheckedItems.length && items.length !== 0) {
+      setChosenConfettiFile(confettiFiles[Math.floor(Math.random() * confettiFiles.length)]);
+      triggerConfetti();
     }
   };
 
@@ -57,6 +92,13 @@ const GroceryListComponent = () => {
     const newList = new GroceryList('groceryList');
     await newList.deleteItem(index);
     setGroceryList(newList);
+
+    const itemName = items[index];
+    setCheckedItems(checkedItems.filter(i => i !== itemName));
+    const newCheckedGroceryList = new GroceryList('checked');
+    const i = checkedItems.indexOf(itemName);
+    await newCheckedGroceryList.deleteItem(i);
+    setCheckedGroceryList(newCheckedGroceryList);
   };
 
   const updateItem = async (index, name) => {
@@ -73,6 +115,7 @@ const GroceryListComponent = () => {
     const newList = new GroceryList('groceryList');
     await newList.updateItem(index, name);
     setGroceryList(newList);
+    fetchItems();
   };
 
   const deleteAllItems = async () => {
@@ -80,10 +123,13 @@ const GroceryListComponent = () => {
     const newList = new GroceryList('groceryList');
     await newList.deleteAllItems();
     setGroceryList(newList);
+    await uncheckAllItems();
   }
 
-  const uncheckItems = () => {
+  const uncheckAllItems = async () => {
     setCheckedItems([]);
+    await checkedGroceryList.deleteAllItems();
+    setCheckedGroceryList(new GroceryList('checked'));
   };
 
   // const checkAllItems = () => {
@@ -91,59 +137,98 @@ const GroceryListComponent = () => {
   // }
 
   const clearCheckedItems = async () => {
+    fetchItems();
     const newList = new GroceryList('groceryList');
     for (const item of checkedItems) {
       const index = items.indexOf(item);
       await newList.deleteItem(index);
     }
-    setGroceryList(newList);
-    uncheckItems();
+    await uncheckAllItems();
+    setGroceryList(new GroceryList('groceryList'));
   }
 
   const isInList = (name) => {
-    // not case sensitive or whitespace sensitive
     name = name.trim().toLowerCase();
     return items.map(i => i.trim().toLowerCase()).includes(name);
   }
 
+  const confettiRef = useRef(null);
+  const confettiFiles = [
+    require('../assets/confetti1.json'),
+    require('../assets/confetti2.json'),
+    require('../assets/confetti3.json')
+  ];
+
+  const triggerConfetti = () => {
+    confettiRef.current?.play(0);
+  };
+
   return (
-    <ScrollView keyboardShouldPersistTaps='always'>
-      <View style={{paddingTop: 20}}>
-        {items.map((item, index) => (
-          <ItemComponent
-            key={index}
-            item={item}
-            onDelete={() => deleteItem(index)}
-            onUpdate={(name) => updateItem(index, name)}
-            onCheck={(isChecked) => handleCheck(item, isChecked)}
-            isChecked={checkedItems.includes(item)}
-          />
-        ))}
-        <Button title="Add Item" onPress={() => setDialogVisible(true)} />
-        <Button title="Uncheck All Items" onPress={uncheckItems} />
-        {/* <Button title="Check All Items" onPress={checkAllItems} /> */}
-        <Button title="Clear Checked Items" onPress={clearCheckedItems} />
-        <Dialog.Container visible={isDialogVisible}>
-          <Dialog.Title>Add Item</Dialog.Title>
-          <Dialog.Input onChangeText={setNewItemName} placeholder="Enter item name" autoFocus={true} />
-          <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
-          <Dialog.Button label="Add" onPress={addItem} />
-        </Dialog.Container>
-        <Dialog.Container visible={isDeleteAllDialogVisible}>
-          <Dialog.Title>Delete All Items</Dialog.Title>
-          <Dialog.Description>Are you sure?</Dialog.Description>
-          <Dialog.Button label="Cancel" onPress={() => setDeleteAllDialogVisible(false)} />
-          <Dialog.Button label="Delete All" onPress={deleteAllItems} color="red" />
-        </Dialog.Container>
-        <Dialog.Container visible={isItemExistsDialogVisible}>
-          <Dialog.Title>Item Exists</Dialog.Title>
-          <Dialog.Description>Item already in the list. Please pick a different name.</Dialog.Description>
-          <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
-        </Dialog.Container>
-        <Button title="Delete All" onPress={() => setDeleteAllDialogVisible(true)} color="red" />
-        <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
+    <View style={{flex: 1}}>
+      <View style={groceryListStyles.header}>
+        <View style={groceryListStyles.clearAllButton}>
+          <TouchableOpacity style={groceryListStyles.clearAllButton} onPress={() => setDeleteAllDialogVisible(true)}>
+            <Text style={groceryListStyles.clearAllButtonText}>Clear All</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={groceryListStyles.clearCheckedButton}>
+          <TouchableOpacity style={groceryListStyles.clearCheckedButton} onPress={clearCheckedItems}>
+            <Text style={groceryListStyles.clearCheckedButtonText}>Clear Checked</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={groceryListStyles.title}>Grocery List</Text>
+        <View style={groceryListStyles.addButton}>
+          <TouchableOpacity style={groceryListStyles.addButton} onPress={() => setDialogVisible(true)}>
+            <Text style={groceryListStyles.addButtonText}>+</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </ScrollView>
+      <ScrollView keyboardShouldPersistTaps='always' backgroundColor='#F0F0E3'>
+        <View style={groceryListStyles.listMap}>
+          {items.map((item, index) => (
+            <GroceryItemComponent
+              key={`${index}-${items.length}`}
+              item={item}
+              onDelete={() => deleteItem(index)}
+              onUpdate={(name) => updateItem(index, name)}
+              onCheck={(isChecked) => handleCheck(item, isChecked)}
+              isChecked={checkedItems.includes(item)}
+            />
+          ))}
+          {/* <Button title="Uncheck All Items" onPress={uncheckAllItems} /> */}
+          {/* <Button title="Check All Items" onPress={checkAllItems} /> */}
+          {/* <Button title="Clear Checked Items" onPress={clearCheckedItems} /> */}
+          
+          {/* <Button title="Delete All" onPress={() => setDeleteAllDialogVisible(true)} color="red" /> */}
+          {/* <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text> */}
+        </View>
+      </ScrollView>
+      <Dialog.Container visible={isDialogVisible}>
+        <Dialog.Title>Add Item</Dialog.Title>
+        <Dialog.Input onChangeText={setNewItemName} placeholder="Enter item name" autoFocus={true} />
+        <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
+        <Dialog.Button label="Add" onPress={addItem} />
+      </Dialog.Container>
+      <Dialog.Container visible={isDeleteAllDialogVisible}>
+        <Dialog.Title>Delete All Items</Dialog.Title>
+        <Dialog.Description>Are you sure?</Dialog.Description>
+        <Dialog.Button label="Cancel" onPress={() => setDeleteAllDialogVisible(false)} />
+        <Dialog.Button label="Delete All" onPress={deleteAllItems} color="red" />
+      </Dialog.Container>
+      <Dialog.Container visible={isItemExistsDialogVisible}>
+        <Dialog.Title>Item Exists</Dialog.Title>
+        <Dialog.Description>Item already in the list. Please pick a different name.</Dialog.Description>
+        <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
+      </Dialog.Container>
+      <LottieView
+        ref={confettiRef}
+        source={chosenConfettiFile}
+        autoPlay={false}
+        loop={false}
+        style={groceryListStyles.lottie}
+        resizeMode='cover'
+      />
+    </View>
   );
 };
 

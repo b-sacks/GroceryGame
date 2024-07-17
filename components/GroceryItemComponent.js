@@ -1,15 +1,13 @@
-// item in recipe component
-
+// components/ItemComponent.js
 const React = require('react');
 const { useState, useRef } = React;
-const { View, Text, TextInput, Button, TouchableOpacity, StyleSheet, Animated } = require('react-native');
+const { View, Text, TextInput, Button, TouchableOpacity, StyleSheet, Animated, Dimensions } = require('react-native');
 import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Dialog from "react-native-dialog";
-const { recipeListItemStyles } = require('../styles/RecipeListStyles');
 import CheckBox from "@react-native-community/checkbox";
-const GroceryList = require('../services/GroceryList');
+const { groceryListItemStyles } = require('../styles/GroceryListStyles');
 
-const RecipeComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
+const GroceryItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [inputText, setInputText] = useState('');
 
@@ -40,10 +38,12 @@ const RecipeComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Swipeable renderRightActions={renderSwipe} onSwipeableOpen={onDelete}>
-        <View style={recipeListItemStyles.listContainer}>
+        <View style={groceryListItemStyles.listContainer}>
           <TouchableOpacity onPress={handleEdit}>
-            <Text style={recipeListItemStyles.itemName}>{item}</Text>
+            <Text style={groceryListItemStyles.itemName}>{item}</Text>
           </TouchableOpacity>
+          {/* <Button title="Edit" onPress={handleEdit} /> */}
+          {/* <Button title="Delete" onPress={onDelete} /> */}
           <CheckBox
             value={isChecked}
             onValueChange={onCheck}
@@ -53,9 +53,6 @@ const RecipeComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
             onAnimationType="fill"
             offAnimationType="bounce"
           />
-          {/* <Text style={{paddingTop: 11}}>{item}</Text> */}
-          {/* <Button title="Edit" onPress={handleEdit} /> */}
-          {/* <Button title="Delete" onPress={onDelete} /> */}
 
           <Dialog.Container visible={isDialogVisible}>
             <Dialog.Title>Edit Item</Dialog.Title>
@@ -65,9 +62,9 @@ const RecipeComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
           </Dialog.Container>
         </View>
       </Swipeable>
-      <View style={recipeListItemStyles.itemBorder} />
+      <View style={groceryListItemStyles.itemBorder} />
     </GestureHandlerRootView>
   );
 };
 
-module.exports = RecipeComponent;
+module.exports = GroceryItemComponent;

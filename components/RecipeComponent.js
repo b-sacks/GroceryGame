@@ -3,32 +3,41 @@
 // components/GroceryListComponent.js
 const React = require('react');
 const { useState, useEffect } = React;
-const { View, Button, TextInput, Text, ScrollView } = require('react-native');
+const { View, Button, TextInput, Text, ScrollView, TouchableOpacity } = require('react-native');
 const RecipeItemComponent = require('./RecipeItemComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
 import { useFocusEffect } from '@react-navigation/native';
+const { recipeStyles } = require('../styles/RecipeListStyles');
 
 const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
   const [newItemName, setNewItemName] = useState('');
   const [groceryList, setGroceryList] = useState(new GroceryList(recipeName));
   const [items, setItems] = useState([]);
   const [isRecipeInGroceryList, setIsRecipeInGroceryList] = useState(false);
+  const [checked, setChecked] = useState(false);
   
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [isItemExistsDialogVisible, setItemExistsDialogVisible] = useState(false);
   const [isDeleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
+  const [isDeleteRecipeDialogVisible, setDeleteRecipeDialogVisible] = useState(false);
+
+  const [gItems, setGItems] = useState([]);
 
   const fetchItems = async () => {
     const fetchedItems = await groceryList.getItems();
     setItems(fetchedItems);
+
+    const gList = new GroceryList('groceryList');
+    const fetchedGItems = await gList.getItems();
+    setGItems(fetchedGItems);
   };
 
   useFocusEffect(
     React.useCallback(() => {
       fetchItems();
       isInGroceryList();
-    }, [groceryList, isRecipeInGroceryList])
+    }, [groceryList, isRecipeInGroceryList, checked])
   );
 
   // useEffect(() => {
@@ -107,8 +116,9 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
     await fetchItems();
     const groceryList = new GroceryList('groceryList');
     const groceryListItems = await groceryList.getItems();
-    for (const item of items) {
-      if (!groceryListItems.includes(item)) {
+    for (let item of items) {
+      item = item.trim().toLowerCase();
+      if (!groceryListItems.map(i => i.trim().toLowerCase()).includes(item)) {
         setIsRecipeInGroceryList(false);
         return;
       }
@@ -116,21 +126,62 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
     setIsRecipeInGroceryList(true);
     return;
   }
+  const handleCheck = async (item, isChecked) => {
+    const newGroceryList = new GroceryList('groceryList');
+    if (isChecked) {
+      parsedItem = item.trim().toLowerCase();
+      const groceryList = new GroceryList('groceryList');
+      const groceryListItems = await groceryList.getItems();
+      if (!groceryListItems.map(i => i.trim().toLowerCase()).includes(parsedItem)) {
+        await newGroceryList.addItem(item);
+      }
+    } else {
+      const groceryListItems = await newGroceryList.getItems();
+      await newGroceryList.deleteItem(groceryListItems.indexOf(item));
+    }
+    setChecked(!checked);
+  };
+
+  const isItemGroceryList = (name) => {
+    name = name.trim().toLowerCase();
+    return gItems.map(i => i.trim().toLowerCase()).includes(name);
+  }
 
   return (
-    <ScrollView keyboardShouldPersistTaps='always'>
-      <Text style={{fontSize: 20, textAlign: 'center'}}>{recipeName}</Text>
+    <View keyboardShouldPersistTaps='always' style={recipeStyles.recipeContainer}>
+      <View style={recipeStyles.header}>
+        <View style={recipeStyles.deleteRecipeButton}>
+          <TouchableOpacity style={recipeStyles.deleteRecipeButton} onPress={() => setDeleteRecipeDialogVisible(true)}>
+            <Text style={recipeStyles.deleteRecipeButtonText}>Delete Recipe</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={recipeStyles.addToListButton}>
+          <TouchableOpacity style={recipeStyles.addToListButton} onPress={addToGroceryList} disabled={isRecipeInGroceryList}>
+            <Text style={[recipeStyles.addToListButtonText, isRecipeInGroceryList && recipeStyles.addToListButtonDisabled]}>
+              {isRecipeInGroceryList ? "Already In Grocery List": "Add To Grocery List"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={recipeStyles.recipeName}>{recipeName}</Text>
+        <View style={recipeStyles.addButton}>
+          <TouchableOpacity style={recipeStyles.addButton} onPress={() => setDialogVisible(true)}>
+            <Text style={recipeStyles.addButtonText}>+</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
 
-      <View style={{paddingTop: 20}}>
+      <View style={recipeStyles.listMap}>
         {items.map((item, index) => (
           <RecipeItemComponent
-            key={index}
+            key={`${index}-${items.length}`}
             item={item}
             onDelete={() => deleteItem(index)}
             onUpdate={(name) => updateItem(index, name)}
+            onCheck={(isChecked) => handleCheck(item, isChecked)}
+            isChecked={isItemGroceryList(item)}
           />
         ))}
-        <Button title="Add Item" onPress={() => setDialogVisible(true)} />
+        {/* <Button title="Add Item" onPress={() => setDialogVisible(true)} /> */}
 
         <Dialog.Container visible={isDialogVisible}>
           <Dialog.Title>Add Item</Dialog.Title>
@@ -144,22 +195,28 @@ const RecipeComponent = ({ onDeleteRecipe, recipeName }) => {
           <Dialog.Button label="Cancel" onPress={() => setDeleteAllDialogVisible(false)} />
           <Dialog.Button label="Delete All" onPress={deleteAllItems} color="red" />
         </Dialog.Container>
+        <Dialog.Container visible={isDeleteRecipeDialogVisible}>
+          <Dialog.Title>Delete Recipe</Dialog.Title>
+          <Dialog.Description>Are you sure?</Dialog.Description>
+          <Dialog.Button label="Cancel" onPress={() => setDeleteRecipeDialogVisible(false)} />
+          <Dialog.Button label="Delete" onPress={onDeleteRecipe} color="red" />
+        </Dialog.Container>
         <Dialog.Container visible={isItemExistsDialogVisible}>
           <Dialog.Title>Item Exists</Dialog.Title>
           <Dialog.Description>Item already in the list. Please pick a different name.</Dialog.Description>
           <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
         </Dialog.Container>
 
-        <Button
+        {/* <Button
           title={isRecipeInGroceryList ? "Recipe Already In Grocery List": "Add Recipe To Grocery List"}
           onPress={addToGroceryList}
           disabled={isRecipeInGroceryList}
-        />
-        <Button title="Delete All Items From Recipe" onPress={() => setDeleteAllDialogVisible(true)} color="red" />
-        <Button title="Delete Recipe" onPress={onDeleteRecipe} color="red" />
-        <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
+        /> */}
+        {/* <Button title="Delete All Items From Recipe" onPress={() => setDeleteAllDialogVisible(true)} color="red" /> */}
+        {/* <Button title="Delete Recipe" onPress={() => setDeleteRecipeDialogVisible(true)} color="red" /> */}
+        {/* <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text> */}
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

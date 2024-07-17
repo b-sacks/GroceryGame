@@ -13,7 +13,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.b-sacks.GroceryGame"
+      "bundleIdentifier": "com.bsacks.GroceryGame"
     },
     "android": {
       "adaptiveIcon": {
@@ -23,6 +23,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7998704c-171b-4934-b5cd-1a82dd72a05a"
+      }
     }
   }
 }

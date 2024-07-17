@@ -22,8 +22,8 @@ const deleteItem = async (index, key) => {
   try {
     const groceryList = await AsyncStorage.getItem(key);
     const newGroceryList = JSON.parse(groceryList);
-    newGroceryList.splice(index, 1);
-    const jsonGroceryList = JSON.stringify(newGroceryList);
+    const filteredGroceryList = newGroceryList.filter((item, i) => i !== index);
+    const jsonGroceryList = JSON.stringify(filteredGroceryList);
     await AsyncStorage.setItem(key, jsonGroceryList);
   } catch (e) {
     console.error('Deleting error:', e);

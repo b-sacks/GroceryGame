@@ -1,11 +1,11 @@
 // components/GroceryListComponent.js
 const React = require('react');
 const { useState, useEffect } = React;
-const { View, Button, TextInput, Text, ScrollView } = require('react-native');
-const ItemComponent = require('./ItemComponent');
+const { View, Button, TextInput, Text, ScrollView, StyleSheet, TouchableOpacity } = require('react-native');
 const MasterItemComponent = require('./MasterItemComponent');
 const GroceryList = require('../services/GroceryList');
 import Dialog from "react-native-dialog";
+const { masterListStyles } = require('../styles/MasterListStyles');
 
 const MasterListComponent = () => {
   const [newItemName, setNewItemName] = useState('');
@@ -15,15 +15,16 @@ const MasterListComponent = () => {
   const [itemExistsDialogMessage, setItemExistsDialogMessage] = useState('');
   const [isDeleteAllDialogVisible, setDeleteAllDialogVisible] = useState(false);
   const [items, setItems] = useState([]);
+  const [refresh, setRefresh] = useState(0);
+
+  const fetchItems = async () => {
+    const fetchedItems = await groceryList.getItems();
+    setItems(fetchedItems);
+  };
 
   useEffect(() => {
-    const fetchItems = async () => {
-      const fetchedItems = await groceryList.getItems();
-      setItems(fetchedItems);
-    };
-
     fetchItems();
-  }, [groceryList]);
+  }, [groceryList, refresh]);
 
   const addItem = async () => {
     setDialogVisible(false);
@@ -81,6 +82,7 @@ const MasterListComponent = () => {
       return;
     }
     await groceryList.addItem(item);
+    setRefresh(!refresh);
   }
 
   const isInList = (name) => {
@@ -90,39 +92,54 @@ const MasterListComponent = () => {
   }
 
   return (
-    <ScrollView keyboardShouldPersistTaps='always'>
-      <View style={{paddingTop: 20}}>
-        {items.map((item, index) => (
-          <MasterItemComponent
-            key={index}
-            item={item}
-            onDelete={() => deleteItem(index)}
-            onUpdate={(name) => updateItem(index, name)}
-            onAddToGroceryList={() => addToGroceryList(index)}
-          />
-        ))}
-        <Button title="Add Item" onPress={() => setDialogVisible(true)} />
-        <Dialog.Container visible={isDialogVisible}>
-          <Dialog.Title>Add Item</Dialog.Title>
-          <Dialog.Input onChangeText={setNewItemName} placeholder="Enter item name" autoFocus={true} />
-          <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
-          <Dialog.Button label="Add" onPress={addItem} />
-        </Dialog.Container>
-        <Dialog.Container visible={isDeleteAllDialogVisible}>
-          <Dialog.Title>Delete All Items</Dialog.Title>
-          <Dialog.Description>Are you sure?</Dialog.Description>
-          <Dialog.Button label="Cancel" onPress={() => setDeleteAllDialogVisible(false)} />
-          <Dialog.Button label="Delete All" onPress={deleteAllItems} color="red" />
-        </Dialog.Container>
-        <Dialog.Container visible={isItemExistsDialogVisible}>
-          <Dialog.Title>Item Exists</Dialog.Title>
-          <Dialog.Description>{itemExistsDialogMessage}</Dialog.Description>
-          <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
-        </Dialog.Container>
-        <Button title="Delete All" onPress={() => setDeleteAllDialogVisible(true)} color="red" />
-        <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text>
+    <View style={{flex: 1}}>
+      <View style={masterListStyles.header}>
+        <View style={masterListStyles.clearAllButton}>
+          <TouchableOpacity style={masterListStyles.clearAllButton} onPress={() => setDeleteAllDialogVisible(true)}>
+            <Text style={masterListStyles.clearAllButtonText}>Clear All</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={masterListStyles.title}>Master List</Text>
+        <View style={masterListStyles.addButton}>
+          <TouchableOpacity style={masterListStyles.addButton} onPress={() => setDialogVisible(true)}>
+            <Text style={masterListStyles.addButtonText}>+</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </ScrollView>
+      <ScrollView keyboardShouldPersistTaps='always' backgroundColor='#F0F0E3'>
+        <View style={masterListStyles.listMap}>
+          {items.map((item, index) => (
+            <MasterItemComponent
+              key={`${index}-${items.length}+${refresh}`}
+              item={item}
+              onDelete={() => deleteItem(index)}
+              onUpdate={(name) => updateItem(index, name)}
+              onAddToGroceryList={() => addToGroceryList(index)}
+            />
+          ))}
+          {/* <Button title="Add Item" onPress={() => setDialogVisible(true)} /> */}
+          <Dialog.Container visible={isDialogVisible}>
+            <Dialog.Title>Add Item</Dialog.Title>
+            <Dialog.Input onChangeText={setNewItemName} placeholder="Enter item name" autoFocus={true} />
+            <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
+            <Dialog.Button label="Add" onPress={addItem} />
+          </Dialog.Container>
+          <Dialog.Container visible={isDeleteAllDialogVisible}>
+            <Dialog.Title>Delete All Items</Dialog.Title>
+            <Dialog.Description>Are you sure?</Dialog.Description>
+            <Dialog.Button label="Cancel" onPress={() => setDeleteAllDialogVisible(false)} />
+            <Dialog.Button label="Delete All" onPress={deleteAllItems} color="red" />
+          </Dialog.Container>
+          <Dialog.Container visible={isItemExistsDialogVisible}>
+            <Dialog.Title>Item Exists</Dialog.Title>
+            <Dialog.Description>{itemExistsDialogMessage}</Dialog.Description>
+            <Dialog.Button label="OK" onPress={() => setItemExistsDialogVisible(false)} />
+          </Dialog.Container>
+          {/* <Button title="Delete All" onPress={() => setDeleteAllDialogVisible(true)} color="red" /> */}
+          {/* <Text>{'DEBUG\n' + items.map((item, index) => index + ': ' + item).join(', ')}</Text> */}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
