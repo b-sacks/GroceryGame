@@ -25,6 +25,34 @@ const GroceryListComponent = () => {
   const fetchItems = async () => {
     const fetchedItems = await groceryList.getItems();
     setItems(fetchedItems);
+    // setItemsByCategory({'Other': await (new GroceryList('groceryList')).getItems()});
+    setItemsByCategory({'Baby': await (new GroceryList('Baby')).getItems(),
+                        'Bakery': await (new GroceryList('Bakery')).getItems(),
+                        'Baking': await (new GroceryList('Baking')).getItems(),
+                        'Beverages': await (new GroceryList('Beverages')).getItems(),
+                        'Breakfast': await (new GroceryList('Breakfast')).getItems(),
+                        'Canned Goods': await (new GroceryList('Canned Goods')).getItems(),
+                        'Condiments': await (new GroceryList('Condiments')).getItems(),
+                        'Dairy': await (new GroceryList('Dairy')).getItems(),
+                        'Deli': await (new GroceryList('Deli')).getItems(),
+                        'Desserts': await (new GroceryList('Desserts')).getItems(),
+                        'Dressings': await (new GroceryList('Dressings')).getItems(),
+                        'Frozen': await (new GroceryList('Frozen')).getItems(),
+                        'Grains & Pasta': await (new GroceryList('Grains & Pasta')).getItems(),
+                        'Health': await (new GroceryList('Health')).getItems(),
+                        'Household': await (new GroceryList('Household')).getItems(),
+                        'Meat': await (new GroceryList('Meat')).getItems(),
+                        'Office': await (new GroceryList('Office')).getItems(),
+                        'Personal Care': await (new GroceryList('Health')).getItems(),
+                        'Pet': await (new GroceryList('Pet')).getItems(),
+                        'Produce': await (new GroceryList('Produce')).getItems(),
+                        'Seafood': await (new GroceryList('Seafood')).getItems(),
+                        'Snacks': await (new GroceryList('Snacks')).getItems(),
+                        'Spices': await (new GroceryList('Spices')).getItems(),
+                        'Travel': await (new GroceryList('Travel')).getItems(),
+                        'Wine & Beer': await (new GroceryList('Wine & Beer')).getItems(),
+                        'Other': await (new GroceryList('groceryList')).getItems()
+    });
 
     const fetchedCheckedItems = await checkedGroceryList.getItems();
     setCheckedItems(fetchedCheckedItems);
@@ -46,35 +74,6 @@ const GroceryListComponent = () => {
     //update checked list again
     const updatedCheckedItems = await checkedGroceryList.getItems();
     setCheckedItems(updatedCheckedItems);
-
-    setItemsByCategory({'Other': await (new GroceryList('groceryList')).getItems()});
-    // setItemsByCategory({'Baby': await (new GroceryList('Baby')).getItems(),
-    //                     'Bakery': await (new GroceryList('Bakery')).getItems(),
-    //                     'Baking': await (new GroceryList('Baking')).getItems(),
-    //                     'Beverages': await (new GroceryList('Beverages')).getItems(),
-    //                     'Breakfast': await (new GroceryList('Breakfast')).getItems(),
-    //                     'Canned Goods': await (new GroceryList('Canned Goods')).getItems(),
-    //                     'Condiments': await (new GroceryList('Condiments')).getItems(),
-    //                     'Dairy': await (new GroceryList('Dairy')).getItems(),
-    //                     'Deli': await (new GroceryList('Deli')).getItems(),
-    //                     'Desserts': await (new GroceryList('Desserts')).getItems(),
-    //                     'Dressings': await (new GroceryList('Dressings')).getItems(),
-    //                     'Frozen': await (new GroceryList('Frozen')).getItems(),
-    //                     'Grains & Pasta': await (new GroceryList('Grains & Pasta')).getItems(),
-    //                     'Health': await (new GroceryList('Health')).getItems(),
-    //                     'Household': await (new GroceryList('Household')).getItems(),
-    //                     'Meat': await (new GroceryList('Meat')).getItems(),
-    //                     'Office': await (new GroceryList('Office')).getItems(),
-    //                     'Personal Care': await (new GroceryList('Health')).getItems(),
-    //                     'Pet': await (new GroceryList('Pet')).getItems(),
-    //                     'Produce': await (new GroceryList('Produce')).getItems(),
-    //                     'Seafood': await (new GroceryList('Seafood')).getItems(),
-    //                     'Snacks': await (new GroceryList('Snacks')).getItems(),
-    //                     'Spices': await (new GroceryList('Spices')).getItems(),
-    //                     'Travel': await (new GroceryList('Travel')).getItems(),
-    //                     'Wine & Beer': await (new GroceryList('Wine & Beer')).getItems(),
-    //                     'Other': await (new GroceryList('Other')).getItems()
-    // });
   };
 
   const handleCheck = async (item, isChecked) => {
@@ -217,21 +216,23 @@ const GroceryListComponent = () => {
 
       <ScrollView keyboardShouldPersistTaps='always' backgroundColor='#F0F0E3'>
         {Object.keys(itemsByCategory).map((category) => (
-          <View key={category}>
-            <CategoryComponent categoryName={category} />
-            <View style={groceryListStyles.listMap}>
-              {itemsByCategory[category].map((item, index) => (
-                <GroceryItemComponent
-                  key={`${index}-${items.length}`}
-                  item={item}
-                  onDelete={() => deleteItem(index)}
-                  onUpdate={(name) => updateItem(index, name)}
-                  onCheck={(isChecked) => handleCheck(item, isChecked)}
-                  isChecked={checkedItems.includes(item)}
-                />
-              ))}
+          itemsByCategory[category].length !== 0 && (
+            <View key={category}>
+              <CategoryComponent categoryName={category} />
+              <View style={groceryListStyles.listMap}>
+                {itemsByCategory[category].map((item, index) => (
+                  <GroceryItemComponent
+                    key={`${index}-${items.length}`}
+                    item={item}
+                    onDelete={() => deleteItem(index)}
+                    onUpdate={(name) => updateItem(index, name)}
+                    onCheck={(isChecked) => handleCheck(item, isChecked)}
+                    isChecked={checkedItems.includes(item)}
+                  />
+                ))}
+              </View>
             </View>
-          </View>
+          )
         ))}
       </ScrollView>
 

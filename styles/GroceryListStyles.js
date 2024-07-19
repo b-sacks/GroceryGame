@@ -51,6 +51,16 @@ const groceryListItemStyles = StyleSheet.create({
   itemBorder: {
     ...masterStyles.itemBorder,
   },
+  categoryButton: {
+    position: 'absolute',
+    right: 32,
+    marginTop: -11.5,
+  },
+  categoryButtonText: {
+    fontSize: 18,
+    color: '#0A0903',
+    fontFamily: 'Avenir',
+  },
 });
 
 module.exports = { groceryListStyles, groceryListItemStyles };

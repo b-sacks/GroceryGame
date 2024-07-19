@@ -7,9 +7,10 @@ import Dialog from "react-native-dialog";
 import CheckBox from "@react-native-community/checkbox";
 const { groceryListItemStyles } = require('../styles/GroceryListStyles');
 
-const GroceryItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck, category }) => {
+const GroceryItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [inputText, setInputText] = useState('');
+  const [isCategoryListVisible, setCategoryListVisible] = useState(false);
 
   const handleEdit = () => {
     setDialogVisible(true);
@@ -35,6 +36,11 @@ const GroceryItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck, ca
     );
   };
 
+  const changeCategory = async () => {
+    console.log('pressed', item);
+    setCategoryListVisible(false);
+  };
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Swipeable renderRightActions={renderSwipe} onSwipeableOpen={onDelete}>
@@ -42,8 +48,14 @@ const GroceryItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck, ca
           <TouchableOpacity onPress={handleEdit}>
             <Text style={groceryListItemStyles.itemName}>{item}</Text>
           </TouchableOpacity>
-          {/* <Button title="Edit" onPress={handleEdit} /> */}
-          {/* <Button title="Delete" onPress={onDelete} /> */}
+          <View style={groceryListItemStyles.categoryButton}>
+            <TouchableOpacity style={groceryListItemStyles.categoryButton} onPress={() => {
+              console.log('pressed', item); 
+              setCategoryListVisible(true)}}
+            >
+              <Text style={groceryListItemStyles.categoryButtonText}>Category</Text>
+            </TouchableOpacity>
+          </View>
           <CheckBox
             value={isChecked}
             onValueChange={onCheck}
