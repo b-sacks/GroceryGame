@@ -6,6 +6,8 @@ import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler'
 import Dialog from "react-native-dialog";
 import CheckBox from "@react-native-community/checkbox";
 const { groceryListItemStyles } = require('../styles/GroceryListStyles');
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import SelectDropdown from 'react-native-select-dropdown'
 
 const GroceryItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) => {
   const [isDialogVisible, setDialogVisible] = useState(false);
@@ -48,13 +50,44 @@ const GroceryItemComponent = ({ item, onDelete, onUpdate, isChecked, onCheck }) 
           <TouchableOpacity onPress={handleEdit}>
             <Text style={groceryListItemStyles.itemName}>{item}</Text>
           </TouchableOpacity>
-          <View style={groceryListItemStyles.categoryButton}>
+          {/* <View style={groceryListItemStyles.categoryButton}>
             <TouchableOpacity style={groceryListItemStyles.categoryButton} onPress={() => {
-              console.log('pressed', item); 
-              setCategoryListVisible(true)}}
-            >
+              console.log('pressed', item);
+              setCategoryListVisible(true);
+            }}>
               <Text style={groceryListItemStyles.categoryButtonText}>Category</Text>
             </TouchableOpacity>
+          </View> */}
+          <View>
+            <SelectDropdown
+              data={["Produce", "Meat", "Dairy", "Frozen", "Canned", "Bakery", "Beverages", "Snacks", "Other"]}
+              onSelect={(selectedItem, index) => {
+                console.log(selectedItem, index);
+                changeCategory();
+              }}
+              renderButton={(selectedItem, isOpened) => {
+                return (
+                  <View>
+                    <Text>
+                      {(selectedItem) || 'Category'}
+                    </Text>
+                  </View>
+                );
+              }}
+              renderItem={(item, index, isSelected) => {
+                return (
+                  <View>
+                    <Text>{item}</Text>
+                  </View>
+                );
+              }}
+              buttonTextAfterSelection={(selectedItem, index) => {
+                return selectedItem;
+              }}
+              rowTextForSelection={(item, index) => {
+                return item;
+              }}
+            />
           </View>
           <CheckBox
             value={isChecked}
