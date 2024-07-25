@@ -51,7 +51,8 @@ const GroceryListComponent = () => {
                         'Spices': await (new GroceryList('Spices')).getItems(),
                         'Travel': await (new GroceryList('Travel')).getItems(),
                         'Wine & Beer': await (new GroceryList('Wine & Beer')).getItems(),
-                        'Other': await (new GroceryList('groceryList')).getItems()
+                        'Other': await (new GroceryList('Other')).getItems(),
+                        'groceryList': await (new GroceryList('groceryList')).getItems()
     });
 
     const fetchedCheckedItems = await checkedGroceryList.getItems();
@@ -115,15 +116,25 @@ const GroceryListComponent = () => {
     const newList = new GroceryList('groceryList');
     await newList.addItem(newItemName);
     setNewItemName('');
+    if (findItemCategory(newItemName) === null) {
+      const otherList = new GroceryList('Other');
+      otherList.addItem(newItemName);
+    }
     setGroceryList(newList);
   };
 
   const deleteItem = async (index) => {
+    const itemName = items[index];
+    // const category = findItemCategory(itemName);
+    // const categoryList = new GroceryList(category);
+    // const categoryItems = await categoryList.getItems();
+    // const catIndex = categoryItems.indexOf(itemName);
+    // await categoryList.deleteItem(catIndex);
+
     const newList = new GroceryList('groceryList');
     await newList.deleteItem(index);
     setGroceryList(newList);
 
-    const itemName = items[index];
     setCheckedItems(checkedItems.filter(i => i !== itemName));
     const newCheckedGroceryList = new GroceryList('checked');
     const i = checkedItems.indexOf(itemName);
@@ -193,6 +204,30 @@ const GroceryListComponent = () => {
     confettiRef.current?.play(0);
   };
 
+  const findItemCategory = (itemName) => {
+    for (const category in itemsByCategory) {
+      if (itemsByCategory[category].some(item => item.trim().toLowerCase() === itemName.trim().toLowerCase())) {
+        return category;
+      }
+    }
+    return null; // Item not found in any category
+  };
+
+  const changeCategory = async (item, category) => {
+    console.log('pressed', category);
+    const oldCategory = findItemCategory(item);
+    if (oldCategory === category) {
+      return;
+    }
+    const oldCategoryList = new GroceryList(oldCategory);
+    const oldCategoryItems = await oldCategoryList.getItems();
+    const index = oldCategoryItems.indexOf(item);
+    await oldCategoryList.deleteItem(index);
+    const categoryList = new GroceryList(category);
+    await categoryList.addItem(item);
+    await fetchItems();
+  };
+
   return (
     <View style={{flex: 1}}>
       <View style={groceryListStyles.header}>
@@ -216,11 +251,12 @@ const GroceryListComponent = () => {
 
       <ScrollView keyboardShouldPersistTaps='always' backgroundColor='#F0F0E3'>
         {Object.keys(itemsByCategory).map((category) => (
-          itemsByCategory[category].length !== 0 && (
+          itemsByCategory[category].some(item => items.includes(item)) && (
             <View key={category}>
               <CategoryComponent categoryName={category} />
               <View style={groceryListStyles.listMap}>
                 {itemsByCategory[category].map((item, index) => (
+                  items.includes(item) && (
                   <GroceryItemComponent
                     key={`${index}-${items.length}`}
                     item={item}
@@ -228,8 +264,9 @@ const GroceryListComponent = () => {
                     onUpdate={(name) => updateItem(index, name)}
                     onCheck={(isChecked) => handleCheck(item, isChecked)}
                     isChecked={checkedItems.includes(item)}
+                    onChangeCategory={(category) => changeCategory(item, category)}
                   />
-                ))}
+                )))}
               </View>
             </View>
           )
