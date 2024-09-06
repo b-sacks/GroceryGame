@@ -20,12 +20,27 @@ const GroceryListComponent = () => {
   const [items, setItems] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
   const [chosenConfettiFile, setChosenConfettiFile] = useState('');
-  const [itemsByCategory, setItemsByCategory] = useState({'Other': []});
+  const [itemsByCategory, setItemsByCategory] = useState({'Other': ['s']});
 
   const fetchItems = async () => {
     const fetchedItems = await groceryList.getItems();
     setItems(fetchedItems);
-    // setItemsByCategory({'Other': await (new GroceryList('groceryList')).getItems()});
+
+    const updatedItemsByCategory = { ...itemsByCategory };
+    console.log('Items:', updatedItemsByCategory['Other']);
+
+    for (const item of fetchedItems) {
+      if (findItemCategory(item) === null) {
+        console.log('Adding item to Other:', item);
+        console.log('Category:', findItemCategory(item));
+        console.log('itemsByCategory:', itemsByCategory['Other']);
+        const otherList = new GroceryList('Other');
+        const otherItems = await otherList.getItems();
+        console.log('Other Items:', otherItems);
+        console.log('');
+        await otherList.addItem(item);
+      }
+    }
     setItemsByCategory({'Baby': await (new GroceryList('Baby')).getItems(),
                         'Bakery': await (new GroceryList('Bakery')).getItems(),
                         'Baking': await (new GroceryList('Baking')).getItems(),
@@ -51,8 +66,8 @@ const GroceryListComponent = () => {
                         'Spices': await (new GroceryList('Spices')).getItems(),
                         'Travel': await (new GroceryList('Travel')).getItems(),
                         'Wine & Beer': await (new GroceryList('Wine & Beer')).getItems(),
-                        'Other': await (new GroceryList('Other')).getItems(),
-                        'groceryList': await (new GroceryList('groceryList')).getItems()
+                        'Other': await (new GroceryList('Other')).getItems()
+                        // 'groceryList': await (new GroceryList('groceryList')).getItems()
     });
 
     const fetchedCheckedItems = await checkedGroceryList.getItems();
@@ -118,13 +133,13 @@ const GroceryListComponent = () => {
     setNewItemName('');
     if (findItemCategory(newItemName) === null) {
       const otherList = new GroceryList('Other');
-      otherList.addItem(newItemName);
+      await otherList.addItem(newItemName);
     }
     setGroceryList(newList);
   };
 
-  const deleteItem = async (index) => {
-    const itemName = items[index];
+  const deleteItem = async (itemName) => {
+    // const itemName = items[index];
     // const category = findItemCategory(itemName);
     // const categoryList = new GroceryList(category);
     // const categoryItems = await categoryList.getItems();
@@ -132,7 +147,8 @@ const GroceryListComponent = () => {
     // await categoryList.deleteItem(catIndex);
 
     const newList = new GroceryList('groceryList');
-    await newList.deleteItem(index);
+    const groceryIindex = items.indexOf(itemName);
+    await newList.deleteItem(groceryIindex);
     setGroceryList(newList);
 
     setCheckedItems(checkedItems.filter(i => i !== itemName));
@@ -260,7 +276,7 @@ const GroceryListComponent = () => {
                   <GroceryItemComponent
                     key={`${index}-${items.length}`}
                     item={item}
-                    onDelete={() => deleteItem(index)}
+                    onDelete={() => deleteItem(item)}
                     onUpdate={(name) => updateItem(index, name)}
                     onCheck={(isChecked) => handleCheck(item, isChecked)}
                     isChecked={checkedItems.includes(item)}
