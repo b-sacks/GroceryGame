@@ -132,15 +132,16 @@ const GroceryListComponent = () => {
     setCheckedGroceryList(new GroceryList('checked'));
   };
 
-  // const checkAllItems = () => {
-  //   setCheckedItems(items);
-  // }
-
   const clearCheckedItems = async () => {
     fetchItems();
     const newList = new GroceryList('groceryList');
-    for (const item of checkedItems) {
-      const index = items.indexOf(item);
+    const indexesToDelete = checkedItems
+      .map(item => items.indexOf(item))
+      .filter(index => index !== -1) // filter out items that are not in the grocery list
+      .sort((a, b) => b - a); // highest -> lowest
+  
+    // Delete from the end so earlier indexes don’t shift
+    for (const index of indexesToDelete) {
       await newList.deleteItem(index);
     }
     await uncheckAllItems();
