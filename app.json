@@ -14,7 +14,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.bsacks.GroceryGame",
-      "buildNumber": "9",
+      "buildNumber": "10",
       "deploymentTarget": "16.4"
     },
     "android": {
