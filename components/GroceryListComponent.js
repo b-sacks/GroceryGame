@@ -133,14 +133,17 @@ const GroceryListComponent = () => {
   };
 
   const clearCheckedItems = async () => {
-    fetchItems();
     const newList = new GroceryList('groceryList');
-    const indexesToDelete = checkedItems
-      .map(item => items.indexOf(item))
+    const currentItems = await newList.getItems();
+    const checkedList = new GroceryList('checked');
+    const currentCheckedItems = await checkedList.getItems();
+
+    const indexesToDelete = currentCheckedItems
+      .map(item => currentItems.indexOf(item))
       .filter(index => index !== -1) // filter out items that are not in the grocery list
       .sort((a, b) => b - a); // highest -> lowest
-  
-    // Delete from the end so earlier indexes don’t shift
+
+    // Delete from the end so earlier indexes don't shift
     for (const index of indexesToDelete) {
       await newList.deleteItem(index);
     }
