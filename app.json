@@ -13,8 +13,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.bsacks.GroceryGame",
-      "buildNumber": "2"
+      "bundleIdentifier": "com.bsacks.GroceryGame"
     },
     "android": {
       "adaptiveIcon": {
