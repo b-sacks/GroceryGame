@@ -2,7 +2,7 @@
   "expo": {
     "name": "GroceryGame",
     "slug": "GroceryGame",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -14,7 +14,8 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.bsacks.GroceryGame",
-      "buildNumber": "2"
+      "buildNumber": "17",
+      "deploymentTarget": "16.4"
     },
     "android": {
       "adaptiveIcon": {

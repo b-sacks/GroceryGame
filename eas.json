@@ -1,6 +1,7 @@
 {
   "cli": {
-    "version": ">= 10.2.0"
+    "version": ">= 10.2.0",
+    "appVersionSource": "local"
   },
   "build": {
     "development-simulator": {
@@ -17,7 +18,12 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "ios": {
+        "image": "latest"
+      },
+      "autoIncrement": true
+    }
   },
   "submit": {
     "production": {}
