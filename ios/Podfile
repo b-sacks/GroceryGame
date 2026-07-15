@@ -4,6 +4,10 @@ require File.join(File.dirname(`node --print "require.resolve('react-native/pack
 require 'json'
 podfile_properties = JSON.parse(File.read(File.join(__dir__, 'Podfile.properties.json'))) rescue {}
 
+# Expo SDK 57 precompiled modules require the prebuilt React Native core.
+# EAS sets EXPO_USE_PRECOMPILED_MODULES during cloud builds, so keep the
+# React Native setting aligned before Expo autolinking evaluates the pods.
+ENV['RCT_USE_PREBUILT_RNCORE'] = '1'
 ENV['RCT_NEW_ARCH_ENABLED'] = podfile_properties['newArchEnabled'] == 'true' ? '1' : '0'
 ENV['EX_DEV_CLIENT_NETWORK_INSPECTOR'] = podfile_properties['EX_DEV_CLIENT_NETWORK_INSPECTOR']
 
